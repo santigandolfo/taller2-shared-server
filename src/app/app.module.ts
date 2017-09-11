@@ -11,8 +11,6 @@ import { NotFoundComponent } from './components/notfound/notfound.component';
 import { HomeComponent } from './components/home/home.component';
 
 //Routes
-//import { AppRoutes } from './routes/app.routes';
-
 let routes = [
   {
     path: '',
