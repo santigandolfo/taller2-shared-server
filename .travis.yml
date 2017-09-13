@@ -12,7 +12,7 @@ notifications:
      on_success: change
 install: "npm install && ng build"
 script: 
-  npm run server-test && npm run angular-test
+  npm run server-test
 
 after_success:
   coveralls
