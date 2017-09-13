@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "6.11.2"
+notifications:
+  email:  
+     recipients:
+       -  gonzalpetraglia@gmail.com
+       -  santiago.v.gandolfo@gmail.com
+       -  federicobalina@gmail.com
+       -  christiangelone@gmail.com
+     on_failure: always 
+     on_success: change
+install: "npm install && ng build"
+script: 
+  npm run server-test && npm run angular-test
+
+after_success:
+  coveralls
