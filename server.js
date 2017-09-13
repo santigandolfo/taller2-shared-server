@@ -26,9 +26,9 @@ app.get('*', (req, res) => {
 });
 
 // Checks db
-// dbCheck(()=>{
-//   console.log("DB connection is up and running")
-// },(err) =>{
+// dbCheck(()=> {
+//   console.log("DB connection is up and running");
+// },(err) => {
 //   console.error('Unable to connect to the database:', err);
 //   throw err;
 // });

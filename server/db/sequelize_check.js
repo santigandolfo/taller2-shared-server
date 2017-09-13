@@ -2,9 +2,9 @@ const Sequelize = require('./sequelize');
 
 const dbCheck = (success,fail) => {
   Sequelize.authenticate().then(() => {
-    success()
+    success();
   }).catch(err => {
-    fail(err)
+    fail(err);
   });
 }
 export default dbCheck;
