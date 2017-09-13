@@ -3,10 +3,10 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
-const dbCheck = require('./server/db/sequelize_check');
+const sequelizeCheck = require('./server/db/sequelize_check');
 
 // Get our API routes
-const api = require('./server/routes/api');
+const api = require('./server/api/api');
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.get('*', (req, res) => {
 });
 
 // Checks db
-dbCheck(()=> {
+sequelizeCheck.dbCheck(()=> {
   console.log("DB connection is up and running");
 },(err) => {
   console.error('Unable to connect to the database:', err);
