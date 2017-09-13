@@ -14,5 +14,5 @@ install: "npm install && ng build"
 script: 
   npm run server-test
 
-after_success:
-  coveralls
+# after_success:
+#   coveralls
