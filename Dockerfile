@@ -3,7 +3,7 @@ MAINTAINER Taller2 Team APGB
 
 COPY . /nodeapp
 WORKDIR /nodeapp
-RUN npm install
+RUN npm install --production
 
 RUN chmod +x /nodeapp/start.sh
 CMD ["/nodeapp/start.sh"] 
