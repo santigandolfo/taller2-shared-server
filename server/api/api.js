@@ -6,7 +6,7 @@ const AuthRoutes = require('./routes/AuthRoutes')
 
 router.get('/', (req, res) => {
   res.status(200).json({
-    api: "running"
+    version: "1.0.0"
   })
 });
 

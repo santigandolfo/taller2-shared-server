@@ -1,22 +1,27 @@
+const User = require('../../models/User');
 module.exports = class UserController {
+
+  constructor(){
+    User.sync({force: true}).then(()=>{})
+  }
+
   all(){
-    return [
-      {
-        firstname: "Christian",
-        lastname: "Angelone"
-      },
-      {
-        firstname: "Gonzalo",
-        lastname: "Petraglia"
-      },      
-      {
-        firstname: "Santiago",
-        lastname: "Gandolfo"
-      },
-      {
-        firstname: "Federico",
-        lastname: "Baliña"
-      }
-    ]
+    return User.findAll();
+  }
+
+  create(user){
+    return User.create(user);
+  }
+
+  delete(anId){
+    return User.destroy({where:{ id: anId }});
+  }
+
+  update(user,anId){
+    return User.update(user,{where:{ id: anId }});
+  }
+
+  getById(anId){
+    return User.findOne({where: {id: anId}})
   }
 }

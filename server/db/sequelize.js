@@ -5,7 +5,9 @@ let instance = null;
 module.exports = class Sequelize{  
     constructor() {
         if(!instance){
-              instance = new _Sequelize(db_url);;
+            instance = new _Sequelize(db_url,{
+                  logging: false
+            });
         }
         return instance;
       }

@@ -31,4 +31,5 @@ services:
     environment:
       PORT: 3000
       ENV: DEV
+      TOKENS_SECRET: EF3foe408HH4ul94cHMLnWwu6SObwqT5UIjyWqZYnzoIjRxb7BDa7XYbHw
       DATABASE_URL: postgres://postgres:3x4mpl3@db.local:5432/postgres
