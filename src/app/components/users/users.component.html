@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col s12">
-      <table class="bordered">
+      <table class="bordered centered">
         <thead>
           <tr>
             <th>Firstname</th>
@@ -20,11 +20,11 @@
             <td>{{user.email}}</td>
             <td>{{user.type}}</td>
             <td>
-                <button md-raised-button (click)="openEdit(user.id)" class="waves-effect waves-light btn">
-                  <i class="material-icons">edit</i>
+                <button md-raised-button (click)="openEdit(user.id)" class="waves-effect waves-light btn btn-small blue">
+                    <i class="material-icons">edit</i>
                 </button>
-                <button (click)="delete(user.id)" class="waves-effect waves-light btn">
-                  <i class="material-icons">delete</i>
+                <button class="waves-effect waves-light btn btn-small red">
+                    <i class="material-icons">delete</i>
                 </button>
             </td>
           </tr>
