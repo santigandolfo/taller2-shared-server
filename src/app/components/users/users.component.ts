@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component,Inject,OnInit } from '@angular/core';
+import { User} from '../../entities/user.entity';
+import { UsersService } from '../../services/users.service';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { UserEditModal } from './userseditmodal.component';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -7,9 +10,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-  constructor() { }
+  private users: User[] | null;
+  constructor(public dialog: MdDialog,private usersService: UsersService) {}
 
   ngOnInit() {
+    this.usersService.getAll().then((users: User[]) => 
+      this.users = users
+    );
   }
 
+  delete(anId){
+    this.usersService.delete(anId).then(res => {
+      console.log("deleted");
+      this.usersService.getAll().then((users: User[]) => {
+        this.users = users;
+      });
+    });
+  }
+
+  openEdit(anId){
+    let dialogRef = this.dialog.open(UserEditModal, {
+      width: '350px',
+      data: { 
+        id: anId,
+        service: this.usersService
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.usersService.update(result.id,result).then(res => {
+        this.usersService.getAll().then((users: User[]) => {
+          this.users = users;
+        });
+      });
+    });
+  }
 }
+
+
