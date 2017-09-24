@@ -14,4 +14,4 @@ install: "npm install && ng build"
 script: 
   npm run server-test
 after_success:
-   istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+   npm run coveralls
