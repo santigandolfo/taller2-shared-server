@@ -31,7 +31,7 @@ import { User} from '../../entities/user.entity';
 })
 export class UserEditModal implements OnInit {
 
-  private editUser: User = {
+  editUser: User = {
     id: 0,
     firstname: '',
     lastname: '',

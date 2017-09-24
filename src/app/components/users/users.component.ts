@@ -10,7 +10,7 @@ import { UserEditModal } from './userseditmodal.component';
 })
 export class UsersComponent implements OnInit {
 
-  private users: User[] | null;
+  users: User[] | null;
   constructor(public dialog: MdDialog,private usersService: UsersService) {}
 
   ngOnInit() {
