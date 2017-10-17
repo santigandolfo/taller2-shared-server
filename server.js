@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
-const sequelizeCheck = require('./server/db/sequelize_check');
+const DBInitializer = require('./server/db/db_initializer');
 
 // Get our API routes
 const api = require('./server/api/api');
@@ -25,14 +25,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-// Checks db
-sequelizeCheck.dbCheck(()=> {
-  console.log("DB connection is up and running");
-},(err) => {
-  console.error('Unable to connect to the database:', err);
-  throw err;
-});
-
 /**
  * Get port from environment and store in Express.
  */
@@ -43,6 +35,11 @@ app.set('port', port);
  * Create HTTP server.
  */
 const server = http.createServer(app);
+
+/*
+ * Initializes DB
+*/
+new DBInitializer().initialize();
 
 /**
  * Listen on provided port, on all network interfaces.

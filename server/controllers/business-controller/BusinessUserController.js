@@ -1,9 +1,7 @@
 const BusinessUser = require('../../models/business-user/BusinessUser');
 module.exports = class BusinessUserController {
 
-  constructor(){
-    BusinessUser.sync({force: true}).then(()=>{})
-  }
+  constructor(){}
 
   all(){
     return BusinessUser.findAll();

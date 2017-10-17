@@ -20,6 +20,6 @@ const BusinessUser = sequelize.define('business_user', {
     type: _Sequelize.STRING
   }
 });
-BusinessUser.hasMany(Role);
+BusinessUser.belongsTo(Role);
 
 module.exports = BusinessUser;

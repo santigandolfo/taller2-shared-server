@@ -1,9 +1,7 @@
 const User = require('../../models/User');
 module.exports = class UserController {
 
-  constructor(){
-    User.sync({force: true}).then(()=>{})
-  }
+  constructor(){}
 
   all(){
     return User.findAll();

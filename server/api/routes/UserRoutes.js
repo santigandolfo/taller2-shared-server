@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const UsersCotroller = require('../../controllers/users/UsersController')
-const Logger = require('../log/Logger')
+const UsersCotroller = require('../../controllers/users/UsersController');
+const Logger = require('../../log/Logger');
 const controller = new UsersCotroller();
 
 router.post('/', (req, res) => {

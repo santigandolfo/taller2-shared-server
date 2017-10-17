@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const BusinessUserController = require('../../controllers/business-controller/BusinessUserController')
-const Logger = require('../log/Logger')
+const Logger = require('../../log/Logger')
 const controller = new BusinessUserController();
 
 router.post('/', (req, res) => {
