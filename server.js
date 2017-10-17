@@ -4,7 +4,7 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const DBInitializer = require('./server/db/db_initializer');
-
+const environment = process.env.ENV
 // Get our API routes
 const api = require('./server/api/api');
 
@@ -39,9 +39,11 @@ const server = http.createServer(app);
 /*
  * Initializes DB
 */
-new DBInitializer().initialize();
+new DBInitializer().initialize(environment || 'DEVELOPMENT');
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port, () => console.log(`Shared server running on localhost:${port}...`));
+
+module.exports = server;

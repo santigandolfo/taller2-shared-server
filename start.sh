@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$ENV" = 'DEV' ]; then
-  echo "Running Dev Server"
+if [ "$ENV" = 'DEVELOPMENT' ]; then
+  echo "Running Development Server"
   cd /nodeapp
   exec npm run build^start
 else

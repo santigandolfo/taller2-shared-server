@@ -7,8 +7,9 @@ const Logger = require('../log/Logger');
 
 let instance = null;
 module.exports = class DBInitializer{  
-  constructor() {
+  constructor(environment) {
     if(!instance){
+        this.environment = environment;
         instance = this;
     }
     return instance;
@@ -16,10 +17,10 @@ module.exports = class DBInitializer{
 
   initTables(){
     return new Promise(resolve => {
-
-      User.sync({force: true}).then(() => {
-        Role.sync({force: true}).then(() => {
-          BusinessUser.sync({ force: true }).then(() =>{
+      let dropTable = this.environment == 'DEVELOPMENT';
+      User.sync({ force: dropTable }).then(() => {
+        Role.sync({ force: dropTable }).then(() => {
+          BusinessUser.sync({ force: dropTable }).then(() =>{
             resolve();
           });
         });
