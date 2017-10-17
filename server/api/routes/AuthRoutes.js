@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const JwtAuth = require('../auth/JwtAuth');
 const Logger = require('../../log/Logger');
-const sha256 = require('js-sha256').sha256;
 
 const BusinessUserController = require('../../controllers/business-controller/BusinessUserController')
 const controller = new BusinessUserController();
@@ -12,8 +11,9 @@ router.post('/token', (req, res) => {
   try{
     if(user.hasOwnProperty('username') && user.hasOwnProperty('password')){
       Logger.log(user.username + ' asked for a token',Logger.INFO());
-      controller.exists(user).then(user => {
-        if(user){
+      controller.exists(user).then(exist => {
+        Logger.log(user.username + "exists? " + exist,Logger.INFO());
+        if(exist){
           res.status(201).json({ token: JwtAuth.token(user) });      
         }else{
           res.status(404).send();

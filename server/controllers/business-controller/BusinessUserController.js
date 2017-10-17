@@ -1,5 +1,6 @@
 const BusinessUser = require('../../models/business-user/BusinessUser');
 const Role = require('../../models/business-user/Role');
+const sha256 = require('js-sha256').sha256;
 module.exports = class BusinessUserController {
 
   constructor(){}
@@ -26,7 +27,19 @@ module.exports = class BusinessUserController {
     },limit: aLimit});
   }
 
+  exists(user){
+    return new Promise(resolve => {
+      BusinessUser.count({ where:{
+        username: user.username,
+        password: sha256(user.password)
+      }}).then(count => {
+        resolve(count == 1);
+      });
+    })
+  }
+
   create(user){
+    user.password = sha256(user.password);
     return BusinessUser.create(user);
   }
 
