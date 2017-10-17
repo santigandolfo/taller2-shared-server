@@ -24,6 +24,7 @@ services:
       POSTGRES_PASSWORD: 3x4mpl3
   web:
     build: .
+    image: sharedserver:latest
     ports:
       - "3000:3000"
     links:

@@ -1,10 +1,29 @@
 const BusinessUser = require('../../models/business-user/BusinessUser');
+const Role = require('../../models/business-user/Role');
 module.exports = class BusinessUserController {
 
   constructor(){}
 
-  all(){
-    return BusinessUser.findAll();
+  all(aLimit){
+    aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
+    return BusinessUser.findAll({ include: [
+      { model: Role, 
+        attributes: {
+          exclude: [
+            'id',
+            'updatedAt',
+            'createdAt'
+          ]
+        },
+        as: 'role'}
+    ], attributes: {
+      exclude: [
+        'roleId',
+        'password',
+        'updatedAt',
+        'createdAt',
+      ]
+    },limit: aLimit});
   }
 
   create(user){

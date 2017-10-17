@@ -16,9 +16,12 @@ module.exports = class DBInitializer{
 
   initTables(){
     return new Promise(resolve => {
+
       User.sync({force: true}).then(() => {
-        BusinessUser.sync({ force: true }).then(() =>{
-          resolve();
+        Role.sync({force: true}).then(() => {
+          BusinessUser.sync({ force: true }).then(() =>{
+            resolve();
+          });
         });
       });
     });

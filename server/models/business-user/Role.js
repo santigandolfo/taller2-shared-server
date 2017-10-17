@@ -8,7 +8,7 @@ const Role = sequelize.define('role', {
    allowNull: false,
    unique: true
   },
-  can_be_deleted: {
+  can_user_be_deleted: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
     allowNull: false,
