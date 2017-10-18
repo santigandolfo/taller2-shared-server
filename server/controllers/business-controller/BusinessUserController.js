@@ -38,6 +38,15 @@ module.exports = class BusinessUserController {
     })
   }
 
+  setRole(aUserId,aRoleId){
+    return new Promise(resolve => {
+      this.getById(aUserId).then(user => {
+        user.setRoleId(aRoleId);
+        resolve();
+      })
+    });
+  }
+
   create(user){
     user.password = sha256(user.password);
     return BusinessUser.create(user);
@@ -49,6 +58,10 @@ module.exports = class BusinessUserController {
 
   update(user,anId){
     return BusinessUser.update(user,{where:{ id: anId }});
+  }
+
+  getByUsername(aUsername){
+    return BusinessUser.findOne({where: {username: aUsername}})
   }
 
   getById(anId){
