@@ -33,6 +33,20 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/validate',(req, res) => {
+  let creds = req.body;
+  controller.getByCreds(creds).then(retUser => {
+    Logger.log("User found with: " + JSON.stringify(creds),Logger.INFO());
+    delete retUser['password'];
+    res.status(200).json(retUser);
+  }).catch(fail => {
+    Logger.log("User could not be found: " + JSON.stringify(fail.errors),Logger.ERROR());
+    res.status(500).json({
+      errors: fail.errors
+    });
+  });
+});
+
 router.get('/:id', (req, res) => {
   let id = req.params.id;
   controller.getById(id).then(retUser => {

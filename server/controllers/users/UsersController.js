@@ -1,4 +1,5 @@
 const User = require('../../models/User');
+const sha256 = require('js-sha256').sha256;
 module.exports = class UserController {
 
   constructor(){}
@@ -8,6 +9,7 @@ module.exports = class UserController {
   }
 
   create(user){
+    user.password = sha256(user.password);
     return User.create(user);
   }
 
@@ -17,6 +19,10 @@ module.exports = class UserController {
 
   update(user,anId){
     return User.update(user,{where:{ id: anId }});
+  }
+
+  getByCreds(creds){
+    return User.findOne({where: {username: creds.username,password: sha256(creds.password)}})
   }
 
   getById(anId){
