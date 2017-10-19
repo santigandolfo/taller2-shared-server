@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
       id: retUser.id,
       username: retUser.username
     }),Logger.INFO());
-    res.status(201).send();
+    res.status(201).json({id: retUser.id});
   }).catch(fail => {
     Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
@@ -50,9 +50,9 @@ router.get('/roles',(req,res) => {
 
 router.post('/role',(req,res) => {
   let role = req.body;
-  roleController.create(role).then(() => {
+  roleController.create(role).then(retRole => {
     Logger.log("Role created: " + JSON.stringify(role),Logger.INFO());
-    res.status(201).send();
+    res.status(201).json({id: retRole.id});
   }).catch(fail => {
     Logger.log("Role could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({

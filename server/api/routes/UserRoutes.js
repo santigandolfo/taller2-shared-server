@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
       id: retUser.id,
       username: retUser.username
     }),Logger.INFO());
-    res.status(201).send();
+    res.status(201).json({id: retUser.id});
   }).catch(fail => {
     Logger.log("User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
