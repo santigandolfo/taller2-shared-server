@@ -23,7 +23,7 @@
                 <button md-raised-button (click)="openEdit(user.id)" class="waves-effect waves-light btn btn-small blue">
                     <i class="material-icons">edit</i>
                 </button>
-                <button class="waves-effect waves-light btn btn-small red">
+                <button (click)="delete(user.id)" class="waves-effect waves-light btn btn-small red">
                     <i class="material-icons">delete</i>
                 </button>
             </td>
