@@ -10,7 +10,7 @@ const apiAuthor = process.env.API_AUTHOR;
 const apiReleaseDate = process.env.API_RELEASE_DATE;
 
 router.use((req,res,next) => {
-  res.header('version',apiVersion);
+  res.header('api-version',apiVersion);
   next();
 });
 

@@ -14,9 +14,9 @@ router.post('/', (req, res) => {
     }),Logger.INFO());
     res.status(201).json({id: retUser.id});
   }).catch(fail => {
-    Logger.log("User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -26,9 +26,9 @@ router.get('/', (req, res) => {
     Logger.log("Users retrieved: " + JSON.stringify(retUsers),Logger.INFO());
     res.status(200).json(retUsers);
   }).catch(fail => {
-    Logger.log("Users could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("Users could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -45,9 +45,9 @@ router.post('/validate',(req, res) => {
       res.status(404).send();
     }
   }).catch(fail => {
-    Logger.log("User could not be found: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("User could not be found: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -58,9 +58,9 @@ router.get('/:id', (req, res) => {
     Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
     res.status(200).json(retUser);
   }).catch(fail => {
-    Logger.log("User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -75,9 +75,9 @@ router.put('/:id', (req, res) => {
     }),Logger.INFO());
     res.status(200).send();
   }).catch(fail => {
-    Logger.log("User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -90,9 +90,9 @@ router.delete('/:id', (req, res) => {
     }),Logger.INFO());
     res.status(200).send();
   }).catch(fail => {
-    Logger.log("User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });

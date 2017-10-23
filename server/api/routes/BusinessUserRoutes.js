@@ -69,23 +69,28 @@ router.put('/:userId/role/:roleId',(req,res) => {
       buserController.getById(userId).then(user => {
         if(user){
           user.setRole(role);
-          res.status(203).send();
+          res.status(200).send();
         }else{
-          res.status(404).send();
+          Logger.log("Business User with id " + userId + " not be found",Logger.ERROR());
+          res.status(404).json({
+            error: "Business User with id " + userId + " not found"
+          });
         }
       }).catch(fail => {
         Logger.log("Business User with id " + userId + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map(err => {error: err.message})
+          errors: fail.errors.map((err) => {return {error: err.message}})
         });
       });
     }else{
-      res.status(404).send();
+      res.status(404).json({
+        error: "Role with id " + roleId + " not found"
+      });
     }
   }).catch(fail => {
     Logger.log("Role with id " + roleId + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -98,7 +103,7 @@ router.get('/:id', (req, res) => {
   }).catch(fail => {
     Logger.log("Business User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -115,7 +120,7 @@ router.put('/:id', (req, res) => {
   }).catch(fail => {
     Logger.log("Business User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });
@@ -130,7 +135,7 @@ router.delete('/:id', (req, res) => {
   }).catch(fail => {
     Logger.log("Business User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
+      errors: fail.errors.map((err) => {return {error: err.message}})
     });
   });
 });

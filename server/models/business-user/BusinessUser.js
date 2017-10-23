@@ -12,7 +12,7 @@ const BusinessUser = sequelize.define('business_user', {
   password: {
     type: _Sequelize.STRING,
     allowNull: false
-   },
+  },
   name: {
     type: _Sequelize.STRING
   },

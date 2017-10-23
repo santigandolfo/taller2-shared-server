@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  description: API para el shared server de Llevame
-  title: Llevame - Shared Server API
+  description: API for Shared Server
+  title: FiUber - Shared Server API
   version: 1.0.0
 host: '0.0.0.0:3000'
 schemes:
@@ -36,39 +36,49 @@ tags:
 paths:
   /api:
     get:
+      summary: APIS's general info 
       tags:
         - info
       description: |
-        Returns general info about the API
+        Returns general info about the API.
       responses:
         '200':
           description: API's info
           schema:
             $ref: "#/definitions/ApiInfo"
-      summary: APIS's general info 
+                
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
   /users:
     get:
+      summary: FiUber users list
       tags:
         - app
       security:
         - AuthToken: []
       description: |
-        Returns all the registrated users (drivers and passengers)
+        Returns all the registrated users (drivers and passengers).
       responses:
         '200':
-          description: API's info
+          description: Users
           schema:
             type: array
             items:
               $ref: "#/definitions/User" 
-      summary: FiUber users list
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
     post:
+      summary: FiUber create user
       tags:
         - app
       security:
         - AuthToken: []
       description: |
-        Registers a FiUber user
+        Registers a FiUber user.
       parameters:
         - description: "User fields"
           in: body
@@ -76,7 +86,6 @@ paths:
           required: true
           schema:
             $ref: "#/definitions/UserCreate" 
-          
       responses:
         '200':
           description: Returns registered id
@@ -84,7 +93,84 @@ paths:
             properties:
               id:
                 $ref: "#/definitions/Id" 
-      summary: FiUber users list
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+  /users/{userId}:
+    parameters:
+      - description: "user's identifier"
+        in: path
+        name: userId
+        required: true
+        type: integer
+    get:
+      summary: Get FiUber user
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Returns registrated user with {userId}.
+      responses:
+        '200':
+          description: User
+          schema:
+              $ref: "#/definitions/User" 
+        '404':
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+    put: 
+      summary: Update FiUber user
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Updates registrated user with {userId}.
+      parameters:
+        - description: "User fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/UserCreate"
+      responses:
+        '200':
+          description: User updated
+        '404':
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+    delete: 
+      summary: Update FiUber user
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Deletes registrated user with {userId}.
+      responses:
+        '200':
+          description: User deleted
+        '404':
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+    
       
 definitions:
   ApiInfo:
@@ -94,62 +180,78 @@ definitions:
       author:
         type: string
         description: |
-          API's author
+          API's author.
       release_date:
         type: string
         format: date
         description: |
-          API's release date
+          API's release date.
+          
   Version:
     type: string
     description: API's version
+    
   Id:
     type: integer
     description: |
-      unique numerical identifier
+      unique numerical identifier.
+      
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+        description: | 
+          error message
+  Errors:
+    type: array
+    items:
+      $ref: "#/definitions/Error" 
+      
   UserCreate:
     properties:
       username:
         type: string
         description: |
-          User's user name
+          User's user name. (required to create)
       password:
         type: string
+        format: format> (^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,})
         description: |
-          User's password
+          User's password. (required to create)
       firstname:
         type: string
         description: |
-          User's first name
+          User's first name.
       lastname:
         type: string
         description: |
-          User's last name
+          User's last name.
       email:
         type: string
         format: email
         description: |
-          User's contact email
+          User's contact email. (required to create)
       birthdate:
         type: string
         format: date
         description: |
-          User's birth date         
+          User's birth date.         
       type:
         type: string
         description: |
           User's type 
             - `driver`
-            - `passenger`
+            - `passenger`. (required to create)
       country:
         type: string
         description: |
-          User's living country  
+          User's living country.  
       image: 
         type: string
         format: base64
         description: |
-          User's image in base64             
+          User's image in base64.             
       
   User:
     properties:
@@ -158,40 +260,127 @@ definitions:
       username:
         type: string
         description: |
-          User's user name
+          User's user name.
       firstname:
         type: string
         description: |
-          User's first name
+          User's first name.
       lastname:
         type: string
         description: |
-          User's last name
+          User's last name.
       email:
         type: string
         format: email
         description: |
-          User's contact email
+          User's contact email.
       birthdate:
         type: string
         format: date
         description: |
-          User's birth date         
+          User's birth date.         
       type:
         type: string
         description: |
           User's type 
             - `driver`
-            - `passenger`
+            - `passenger`.
       country:
         type: string
         description: |
-          User's living country  
+          User's living country.  
       image: 
         type: string
         format: base64
         description: |
-          User's image in base64             
-            
+          User's image in base64.      
+          
+  BusinessUser:
+    properties:
+      id: 
+        $ref: '#/definitions/Id'
+      username:
+        type: string
+        description: |
+          BusinessUser's user name.
+      name:
+        type: string
+        description: |
+          BusinessUser's name.
+      surname:
+        type: string
+        description: |
+          BusinessUser's surname.          
+      role:
+       $ref: '#/definitions/Role'
+       
+  BusinessUserCreate:
+    properties:
+      username:
+        type: string
+        description: |
+          BusinessUser's user name. (required to create)
+      password:
+        type: string
+        format: format> (^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,})
+        description: |
+          BusinessUser's password. (required to create)  
+      name:
+        type: string
+        description: |
+          BusinessUser's name. (required to create)
+      surname:
+        type: string
+        description: |
+          BusinessUser's surname.          
+      role:
+       $ref: '#/definitions/Role'
         
-        
+  Role:
+    properties:
+      id: 
+        $ref: '#/definitions/Id'
+      name:
+        type: string
+        description: |
+          Role's name
+      can_user_be_deleted:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user to be deletable.
+      view_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view existing business users.
+      create_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to create business users.       
+      edit_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit existing business users.       
+      delete_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to delete existing business users.
+      view_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view existing users.  
+      edit_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit existing users.
+      delete_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to delete existing users.          
+      view_settings:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view the settings.
+      edit_settings:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit the settings.  
