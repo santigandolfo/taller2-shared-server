@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: API for Shared Server
+  description: API for shared server
   title: FiUber - Shared Server API
   version: 1.0.0
 host: '0.0.0.0:3000'
@@ -50,10 +50,11 @@ paths:
         '500':
           description: Server error
           schema:
-            $ref: "#/definitions/Errors" 
+            $ref: "#/definitions/Errors"
+            
   /users:
     get:
-      summary: FiUber users list
+      summary: FiUber users listing
       tags:
         - app
       security:
@@ -72,7 +73,7 @@ paths:
           schema:
             $ref: "#/definitions/Errors" 
     post:
-      summary: FiUber create user
+      summary: FiUber user registration
       tags:
         - app
       security:
@@ -97,6 +98,7 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
+            
   /users/{userId}:
     parameters:
       - description: "user's identifier"
@@ -105,7 +107,7 @@ paths:
         required: true
         type: integer
     get:
-      summary: Get FiUber user
+      summary: FiUber user fetch
       tags:
         - app
       security:
@@ -126,7 +128,7 @@ paths:
           schema:
             $ref: "#/definitions/Errors" 
     put: 
-      summary: Update FiUber user
+      summary: Update FiUber update
       tags:
         - app
       security:
@@ -152,7 +154,7 @@ paths:
           schema:
             $ref: "#/definitions/Errors" 
     delete: 
-      summary: Update FiUber user
+      summary: FiUber user deletion
       tags:
         - app
       security:
@@ -170,7 +172,207 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
-    
+
+  /business-users:
+     get:
+      summary: FiUber business users listing
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Returns all the registrated business users (app, admin, managers).
+      responses:
+        '200':
+          description: Business Users
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/BusinessUser" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+     post:
+      summary: FiUber business user registration
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Registers a FiUber user.
+      parameters:
+        - description: "User fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessUserCreate" 
+      responses:
+        '200':
+          description: Returns registered id
+          schema:
+            properties:
+              id:
+                $ref: "#/definitions/Id" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+            
+  /business-users/{userId}:
+    parameters:
+      - description: "business user's identifier"
+        in: path
+        name: userId
+        required: true
+        type: integer
+    get:
+      summary: FiUber business user fetch
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Returns registrated business user with {userId}.
+      responses:
+        '200':
+          description: Business User
+          schema:
+              $ref: "#/definitions/BusinessUser" 
+        '404':
+          description: Business User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+    put: 
+      summary: FiUber business user update 
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Updates registrated business user with {userId}.
+      parameters:
+        - description: "Business User fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessUserCreate"
+      responses:
+        '200':
+          description: Business User updated
+        '404':
+          description: Business User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+    delete: 
+      summary: FiUber business user deletion
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Deletes registrated business user with {userId}.
+      responses:
+        '200':
+          description: User deleted
+        '404':
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+  /business-users/{userId}/role/{roleId}:
+    parameters:
+      - name: userId
+        in: path
+        description: "user's identifier"
+        required: true
+        type: integer
+      - name: roleId
+        in: path
+        description: "role's identifier"
+        required: true
+        type: integer
+    put: 
+      summary: FiUber business user role assignation 
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Assigns an existing role with {roleId} to a registrated business user with {userId}.
+      responses:
+        '200':
+          description: Role assigned to Business User
+        '404':
+          description: Business User or Role not found
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+      
+  /business-users/roles:
+    get:
+      summary: FiUber business users's roles listing
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Returns all the business users roles
+      responses:
+        '200':
+          description: Roles
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Role" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors"
+  /business-users/role:          
+    post:
+      summary: FiUber business users's roles registration
+      tags:
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Registers a FiUber business user's role.
+      parameters:
+        - description: "Role"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/RoleCreate" 
+      responses:
+        '200':
+          description: Returns registered id
+          schema:
+            properties:
+              id:
+                $ref: "#/definitions/Id" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+      
       
 definitions:
   ApiInfo:
@@ -213,12 +415,12 @@ definitions:
       username:
         type: string
         description: |
-          User's user name. (required to create)
+          User's user name.
       password:
         type: string
         format: format> (^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,})
         description: |
-          User's password. (required to create)
+          User's password.
       firstname:
         type: string
         description: |
@@ -231,7 +433,7 @@ definitions:
         type: string
         format: email
         description: |
-          User's contact email. (required to create)
+          User's contact email.
       birthdate:
         type: string
         format: date
@@ -242,7 +444,7 @@ definitions:
         description: |
           User's type 
             - `driver`
-            - `passenger`. (required to create)
+            - `passenger`.
       country:
         type: string
         description: |
@@ -251,7 +453,12 @@ definitions:
         type: string
         format: base64
         description: |
-          User's image in base64.             
+          User's image in base64.    
+    required:
+      - username
+      - password
+      - email
+      - type
       
   User:
     properties:
@@ -332,9 +539,60 @@ definitions:
       surname:
         type: string
         description: |
-          BusinessUser's surname.          
-      role:
-       $ref: '#/definitions/Role'
+          BusinessUser's surname. 
+    required:
+      - username
+      - password
+        
+  RoleCreate:
+    properties:
+      name:
+        type: string
+        description: |
+          Role's name
+      can_user_be_deleted:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user to be deletable.
+      view_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view existing business users.
+      create_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to create business users.       
+      edit_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit existing business users.       
+      delete_bs_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to delete existing business users.
+      view_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view existing users.  
+      edit_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit existing users.
+      delete_users:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to delete existing users.          
+      view_settings:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to view the settings.
+      edit_settings:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) business user with this role, to edit the settings. 
+    required:
+      - name
+
         
   Role:
     properties:
@@ -383,4 +641,4 @@ definitions:
       edit_settings:
         type: boolean
         description: |
-          Allows (true) or Forbids (false) business user with this role, to edit the settings.  
+          Allows (true) or Forbids (false) business user with this role, to edit the settings. 
