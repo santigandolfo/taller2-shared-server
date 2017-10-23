@@ -5,16 +5,20 @@ const businessRoutes = require('./routes/BusinessUserRoutes');
 const userRoutes = require('./routes/UserRoutes');
 const AuthRoutes = require('./routes/AuthRoutes');
 
-const apiVersion = "1.0.0";
+const apiVersion = process.env.API_VERSION;
+const apiAuthor = process.env.API_AUTHOR;
+const apiReleaseDate = process.env.API_RELEASE_DATE;
 
-router.get('/*',(req,res,next) => {
+router.use((req,res,next) => {
   res.header('version',apiVersion);
   next();
 });
 
 router.get('/', (req, res) => {
   res.status(200).json({
-    version: apiVersion
+    version: apiVersion,
+    author: apiAuthor,
+    release_date: apiReleaseDate
   })
 });
 

@@ -4,8 +4,17 @@ module.exports = class RoleController {
 
   constructor(){}
 
-  all(){
-    return Role.findAll();
+  all(aLimit){
+    aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
+    return Role.findAll({
+      attributes: {
+        exclude: [
+          'updatedAt',
+          'createdAt'
+        ]
+      },
+      limit: aLimit
+    });
   }
 
   create(role){
@@ -25,6 +34,14 @@ module.exports = class RoleController {
   }
 
   getById(anId){
-    return Role.findOne({where: {id: anId}})
+    return Role.findOne({
+      where: {id: anId},
+      attributes: {
+        exclude: [
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
   }
 }

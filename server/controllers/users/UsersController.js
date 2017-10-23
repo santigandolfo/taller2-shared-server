@@ -4,8 +4,21 @@ module.exports = class UserController {
 
   constructor(){}
 
-  all(){
-    return User.findAll();
+  all(aLimit){
+    aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
+    return User.findAll({
+      attributes: {
+        exclude: [
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      },limit: aLimit});
+  }
+
+  isValid(user){
+    const mUser = new User(user);
+    return mUser.validate();
   }
 
   create(user){
@@ -18,14 +31,36 @@ module.exports = class UserController {
   }
 
   update(user,anId){
-    return User.update(user,{where:{ id: anId }});
+    if(user.hasOwnProperty('password'))
+      user.password = sha256(user.password);
+    return User.update(user,{
+      where:{ id: anId }
+    });
   }
 
   getByCreds(creds){
-    return User.findOne({where: {username: creds.username,password: sha256(creds.password)}})
+    return User.findOne(
+      { where: {username: creds.username,password: sha256(creds.password)},
+      attributes: {
+        exclude: [
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
   }
 
   getById(anId){
-    return User.findOne({where: {id: anId}})
+    return User.findOne({
+      where: {id: anId},
+      attributes: {
+        exclude: [
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
   }
 }

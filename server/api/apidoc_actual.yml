@@ -1,0 +1,197 @@
+swagger: '2.0'
+info:
+  description: API para el shared server de Llevame
+  title: Llevame - Shared Server API
+  version: 1.0.0
+host: '0.0.0.0:3000'
+schemes:
+  - http
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  AuthToken:
+    type: apiKey
+    in: header
+    name: AuthToken
+tags:
+  - name: info
+    description: |
+      Informacion general de la api
+  - name: app
+    description: |
+      Llamados que puede realizar los Application Server
+  - name: admin
+    description: >
+      Llamados que puede realizar los usuarios de negocio con perfil
+      adminstrador
+  - name: manager
+    description: |
+      Llamados que puede realizar los usuarios de negocio con perfil gerente
+  - name: user
+    description: |
+      Llamados que puede realizar los usuarios de negocio con perfil usuario
+paths:
+  /api:
+    get:
+      tags:
+        - info
+      description: |
+        Returns general info about the API
+      responses:
+        '200':
+          description: API's info
+          schema:
+            $ref: "#/definitions/ApiInfo"
+      summary: APIS's general info 
+  /users:
+    get:
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Returns all the registrated users (drivers and passengers)
+      responses:
+        '200':
+          description: API's info
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User" 
+      summary: FiUber users list
+    post:
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Registers a FiUber user
+      parameters:
+        - description: "User fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/UserCreate" 
+          
+      responses:
+        '200':
+          description: Returns registered id
+          schema:
+            properties:
+              id:
+                $ref: "#/definitions/Id" 
+      summary: FiUber users list
+      
+definitions:
+  ApiInfo:
+    properties:
+      version: 
+        $ref: '#/definitions/Version'
+      author:
+        type: string
+        description: |
+          API's author
+      release_date:
+        type: string
+        format: date
+        description: |
+          API's release date
+  Version:
+    type: string
+    description: API's version
+  Id:
+    type: integer
+    description: |
+      unique numerical identifier
+  UserCreate:
+    properties:
+      username:
+        type: string
+        description: |
+          User's user name
+      password:
+        type: string
+        description: |
+          User's password
+      firstname:
+        type: string
+        description: |
+          User's first name
+      lastname:
+        type: string
+        description: |
+          User's last name
+      email:
+        type: string
+        format: email
+        description: |
+          User's contact email
+      birthdate:
+        type: string
+        format: date
+        description: |
+          User's birth date         
+      type:
+        type: string
+        description: |
+          User's type 
+            - `driver`
+            - `passenger`
+      country:
+        type: string
+        description: |
+          User's living country  
+      image: 
+        type: string
+        format: base64
+        description: |
+          User's image in base64             
+      
+  User:
+    properties:
+      id: 
+        $ref: '#/definitions/Id'
+      username:
+        type: string
+        description: |
+          User's user name
+      firstname:
+        type: string
+        description: |
+          User's first name
+      lastname:
+        type: string
+        description: |
+          User's last name
+      email:
+        type: string
+        format: email
+        description: |
+          User's contact email
+      birthdate:
+        type: string
+        format: date
+        description: |
+          User's birth date         
+      type:
+        type: string
+        description: |
+          User's type 
+            - `driver`
+            - `passenger`
+      country:
+        type: string
+        description: |
+          User's living country  
+      image: 
+        type: string
+        format: base64
+        description: |
+          User's image in base64             
+            
+        
+        

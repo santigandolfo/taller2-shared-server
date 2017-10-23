@@ -7,24 +7,29 @@ module.exports = class BusinessUserController {
 
   all(aLimit){
     aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
-    return BusinessUser.findAll({ include: [
-      { model: Role, 
-        attributes: {
-          exclude: [
-            'id',
-            'updatedAt',
-            'createdAt'
-          ]
-        },
-        as: 'role'}
-    ], attributes: {
-      exclude: [
-        'roleId',
-        'password',
-        'updatedAt',
-        'createdAt',
-      ]
-    },limit: aLimit});
+    return BusinessUser.findAll({ 
+      include: [
+        { model: Role, 
+          attributes: {
+            exclude: [
+              'id',
+              'updatedAt',
+              'createdAt'
+            ]
+          },
+          as: 'role'
+        }
+      ], 
+      attributes: {
+        exclude: [
+          'roleId',
+          'password',
+          'updatedAt',
+          'createdAt',
+        ]
+      },
+      limit: aLimit
+    });
   }
 
   exists(user){
@@ -36,6 +41,11 @@ module.exports = class BusinessUserController {
         resolve(count == 1);
       });
     })
+  }
+
+  isValid(user){
+    const mUser = new BusinessUser(user);
+    return mUser.validate();
   }
 
   setRole(aUserId,aRoleId){
@@ -61,10 +71,32 @@ module.exports = class BusinessUserController {
   }
 
   getByUsername(aUsername){
-    return BusinessUser.findOne({where: {username: aUsername}})
+    return BusinessUser.findOne({
+      where: {
+        username: {
+          [Op.like]: aUsername + '%'
+        }
+      },
+      attributes: {
+        exclude: [
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
   }
 
   getById(anId){
-    return BusinessUser.findOne({where: {id: anId}})
+    return BusinessUser.findOne({
+      where: {id: anId},
+      attributes: {
+        exclude: [
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
   }
 }
