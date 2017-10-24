@@ -172,7 +172,38 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
-
+            
+  /users/validate:
+    post:
+      summary: FiUber user validation
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Validates a FiUber user.
+      parameters:
+        - description: "Credential fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/Credential" 
+      responses:
+        '200':
+          description: Returns the user info
+          schema:
+              $ref: "#/definitions/User" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"               
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+      
+  
   /business-users:
      get:
       summary: FiUber business users listing
@@ -460,6 +491,21 @@ definitions:
       - email
       - type
       
+  Credential:
+    properties:
+      username:
+        type: string
+        description: |
+          Credential's user name.
+      password:
+        type: string
+        format: format> (^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,})
+        description: |
+          BusinessUser's password. (required to create)  
+      facebookAuthToken:
+        type: string
+        description: |
+          Credential's facebook token.
   User:
     properties:
       id: 

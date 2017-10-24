@@ -41,8 +41,8 @@ router.post('/validate',(req, res) => {
       delete retUser['password'];
       res.status(200).json(retUser);
     }else{
-      Logger.log("User not found with: " + JSON.stringify(creds),Logger.INFO());
-      res.status(404).send();
+      Logger.log("User not authorized: " + JSON.stringify(creds),Logger.INFO());
+      res.status(401).send();
     }
   }).catch(fail => {
     Logger.log("User could not be found: " + JSON.stringify(fail.errors),Logger.ERROR(''));
