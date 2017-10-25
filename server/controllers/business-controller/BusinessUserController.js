@@ -87,11 +87,39 @@ module.exports = class BusinessUserController {
     })
   }
 
+  getByCreds(creds){
+    return BusinessUser.findOne(
+      { where: {username: creds.username,password: creds.password},
+      include: [
+        { model: Role, 
+          attributes: {
+            exclude: [
+              'id',
+              'updatedAt',
+              'createdAt'
+            ]
+          },
+          as: 'role'
+        }
+      ],
+      attributes: {
+        exclude: [
+          'id',
+          'roleId',
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
+  }
+
   getById(anId){
     return BusinessUser.findOne({
       where: {id: anId},
       attributes: {
         exclude: [
+          'id',
           'password',
           'updatedAt',
           'createdAt'

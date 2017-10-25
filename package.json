@@ -45,6 +45,7 @@
     "js-sha256": "^0.6.0",
     "jsonwebtoken": "^8.0.1",
     "node-gyp": "^3.6.2",
+    "node-rules": "^3.1.0",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
     "rxjs": "^5.4.2",
