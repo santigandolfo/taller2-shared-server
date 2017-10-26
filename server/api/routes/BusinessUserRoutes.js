@@ -35,7 +35,7 @@ function authByToken(req,res){
               });
             }
           }).catch(fail => {
-            Logger.log("Business Users could not be retrieved from token: " + JSON.stringify(fail.errors),Logger.ERROR());
+            Logger.log("Business Users could not be retrieved from token: " + JSON.stringify(fail.errors),Logger.ERROR(''));
             reject({
               errors: fail.errors.map(err => {error: err.message})
             });
@@ -53,14 +53,18 @@ function authByToken(req,res){
 
 router.post('/', (req, res) => {
   let user = req.body;
+  user.roleId = null;
   buserController.create(user).then(retUser => {
     Logger.log("Business User created: " + JSON.stringify({
       id: retUser.id,
       username: retUser.username
     }),Logger.INFO());
-    res.status(201).json({id: retUser.id});
+    res.status(201).json({
+      id: retUser.id,
+      token: JwtAuth.token(user)
+    });
   }).catch(fail => {
-    Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({
       errors: fail.errors.map(err => {error: err.message})
     });
@@ -122,20 +126,21 @@ router.put('/:userId/role/:roleId',(req,res) => {
           user.setRole(role);
           res.status(200).send();
         }else{
-          Logger.log("Business User with id " + userId + " not be found",Logger.ERROR());
+          Logger.log("Business User with id " + userId + " not found.",Logger.WARNING());
           res.status(404).json({
             error: "Business User with id " + userId + " not found"
           });
         }
       }).catch(fail => {
-        Logger.log("Business User with id " + userId + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
+        Logger.log("Business User with id " + userId + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
           errors: fail.errors.map((err) => {return {error: err.message}})
         });
       });
     }else{
+      Logger.log("Role with id " + roleId + " not found.",Logger.WARNING());
       res.status(404).json({
-        error: "Role with id " + roleId + " not found"
+        error: "Role with id " + roleId + " not found."
       });
     }
   }).catch(fail => {
@@ -149,12 +154,21 @@ router.put('/:userId/role/:roleId',(req,res) => {
 router.get('/:id', (req, res) => {
   let id = req.params.id;
   buserController.getById(id).then(retUser => {
-    Logger.log("Business User retrieved: " + JSON.stringify(retUser),Logger.INFO());
-    res.status(200).json(retUser);
+    if(retUser != null){
+      Logger.log("Business User retrieved: " + JSON.stringify(retUser),Logger.INFO());
+      res.status(200).json(retUser);
+    }else{
+      Logger.log("Business User with id " + id + " not found.",Logger.WARNING());
+      res.status(404).json({
+        error: "Business User with id " + id + " not found."
+      });
+    }
   }).catch(fail => {
-    Logger.log("Business User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
+    Logger.log("Business User with id " + id + " could not be retrieved: " + fail,Logger.ERROR(''));
     res.status(500).json({
-      errors: fail.errors.map((err) => {return {error: err.message}})
+      errors: [
+        {error: fail.toString()}
+      ]
     });
   });
 });
@@ -163,11 +177,8 @@ router.put('/:id', (req, res) => {
   let id = req.params.id;
   let user = req.body;
   buserController.update(user,id).then(retUser => {
-    Logger.log("Business User updated: " + JSON.stringify({
-      id: retUser.id,
-      username: retUser.username
-    }),Logger.INFO());
-    res.status(200).send();
+      Logger.log("Business User with id " + id + " updated.",Logger.INFO());
+      res.status(200).send();
   }).catch(fail => {
     Logger.log("Business User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR());
     res.status(500).json({
@@ -179,9 +190,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
   buserController.delete(id).then(retUser => {
-    Logger.log("Business User deleted: " + JSON.stringify({
-      id: id,
-    }),Logger.INFO());
+    Logger.log(("Business User with id " + id + " deleted."),Logger.INFO());
     res.status(200).send();
   }).catch(fail => {
     Logger.log("Business User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR());

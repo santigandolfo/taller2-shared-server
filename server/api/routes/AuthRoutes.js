@@ -11,7 +11,7 @@ router.post('/token', (req, res) => {
   try{
     if(user.hasOwnProperty('username') && user.hasOwnProperty('password')){
       Logger.log(user.username + ' asked for a token',Logger.INFO());
-      controller.exists(user).then(exist => {
+      controller.existsByCreds(user).then(exist => {
         Logger.log(user.username + "exists? " + exist,Logger.INFO());
         if(exist){
           res.status(201).json({ token: JwtAuth.token(user) });      

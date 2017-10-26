@@ -145,10 +145,6 @@ paths:
       responses:
         '200':
           description: User updated
-        '404':
-          description: User not found
-          schema:
-            $ref: "#/definitions/Error"
         '500':
           description: Server error
           schema:
@@ -164,10 +160,6 @@ paths:
       responses:
         '200':
           description: User deleted
-        '404':
-          description: User not found
-          schema:
-            $ref: "#/definitions/Error"
         '500':
           description: Server error
           schema:
@@ -297,10 +289,6 @@ paths:
       responses:
         '200':
           description: Business User updated
-        '404':
-          description: Business User not found
-          schema:
-            $ref: "#/definitions/Error"
         '500':
           description: Server error
           schema:
@@ -316,10 +304,6 @@ paths:
       responses:
         '200':
           description: User deleted
-        '404':
-          description: User not found
-          schema:
-            $ref: "#/definitions/Error"
         '500':
           description: Server error
           schema:

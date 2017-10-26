@@ -55,8 +55,15 @@ router.post('/validate',(req, res) => {
 router.get('/:id', (req, res) => {
   let id = req.params.id;
   controller.getById(id).then(retUser => {
-    Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
-    res.status(200).json(retUser);
+    if(retUser != null){
+      Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
+      res.status(200).json(retUser);
+    }else{
+      Logger.log("User with id " + id + " not found.",Logger.WARNING());
+      res.status(404).json({
+        error: "User with id " + id + " not found."
+      });
+    }
   }).catch(fail => {
     Logger.log("User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
     res.status(500).json({

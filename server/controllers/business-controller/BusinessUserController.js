@@ -5,25 +5,27 @@ module.exports = class BusinessUserController {
 
   constructor(){}
 
+  roleEagerly(){
+    return { 
+      model: Role, 
+      attributes: {
+        exclude: [
+          'id',
+          'updatedAt',
+          'createdAt'
+        ]
+      },
+      as: 'role'
+    }
+  }
+
   all(aLimit){
     aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
     return BusinessUser.findAll({ 
-      include: [
-        { model: Role, 
-          attributes: {
-            exclude: [
-              'id',
-              'updatedAt',
-              'createdAt'
-            ]
-          },
-          as: 'role'
-        }
-      ], 
+      include: [this.roleEagerly()], 
       attributes: {
         exclude: [
           'roleId',
-          'password',
           'updatedAt',
           'createdAt',
         ]
@@ -32,7 +34,7 @@ module.exports = class BusinessUserController {
     });
   }
 
-  exists(user){
+  existsByCreds(user){
     return new Promise(resolve => {
       BusinessUser.count({ where:{
         username: user.username,
@@ -58,8 +60,9 @@ module.exports = class BusinessUserController {
   }
 
   create(user){
-    user.password = sha256(user.password);
-    return BusinessUser.create(user);
+    const hashedPasswordUser = Object.assign({}, user);
+    hashedPasswordUser.password = sha256(hashedPasswordUser.password);
+    return BusinessUser.create(hashedPasswordUser);
   }
 
   delete(anId){
@@ -67,7 +70,19 @@ module.exports = class BusinessUserController {
   }
 
   update(user,anId){
-    return BusinessUser.update(user,{where:{ id: anId }});
+    return BusinessUser.update(user,{
+      where:{ id: anId },
+      include: [this.roleEagerly()],
+      attributes: {
+        exclude: [
+          'id',
+          'roleId',
+          'password',
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    });
   }
 
   getByUsername(aUsername){
@@ -90,18 +105,7 @@ module.exports = class BusinessUserController {
   getByCreds(creds){
     return BusinessUser.findOne(
       { where: {username: creds.username,password: creds.password},
-      include: [
-        { model: Role, 
-          attributes: {
-            exclude: [
-              'id',
-              'updatedAt',
-              'createdAt'
-            ]
-          },
-          as: 'role'
-        }
-      ],
+      include: [this.roleEagerly()],
       attributes: {
         exclude: [
           'id',
@@ -117,9 +121,11 @@ module.exports = class BusinessUserController {
   getById(anId){
     return BusinessUser.findOne({
       where: {id: anId},
+      include: [this.roleEagerly()],
       attributes: {
         exclude: [
           'id',
+          'roleId',
           'password',
           'updatedAt',
           'createdAt'
