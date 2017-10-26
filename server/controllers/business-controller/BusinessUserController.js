@@ -108,7 +108,6 @@ module.exports = class BusinessUserController {
       include: [this.roleEagerly()],
       attributes: {
         exclude: [
-          'id',
           'roleId',
           'password',
           'updatedAt',

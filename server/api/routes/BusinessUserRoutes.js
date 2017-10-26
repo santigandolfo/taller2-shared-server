@@ -36,7 +36,7 @@ function authByToken(req,res){
             }
           }).catch(fail => {
             Logger.log("Business Users could not be retrieved from token: " + JSON.stringify(fail.errors),Logger.ERROR(''));
-            reject({
+            res.status(500).json({
               errors: fail.errors.map(err => {error: err.message})
             });
           });
