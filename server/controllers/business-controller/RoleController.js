@@ -44,4 +44,20 @@ module.exports = class RoleController {
       }
     })
   }
+
+  getByName(aName){
+    return Role.findOne({
+      where: {
+        name: {
+          [Op.like]: aName + '%'
+        }
+      },
+      attributes: {
+        exclude: [
+          'updatedAt',
+          'createdAt'
+        ]
+      }
+    })
+  }
 }

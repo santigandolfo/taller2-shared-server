@@ -4,52 +4,11 @@ const router = express.Router();
 const BusinessUserController = require('../../controllers/business-controller/BusinessUserController')
 const RoleController = require('../../controllers/business-controller/RoleController')
 
-const JwtAuth = require('../auth/JwtAuth');
+const AuthHelper = require('./helpers/auth/AuthHelper');
 const Logger = require('../../log/Logger')
 
 const buserController = new BusinessUserController();
 const roleController = new RoleController();
-
-function authByToken(req,res){
-  return new Promise((resolve,reject) => {
-    Logger.log("Headers received: " + JSON.stringify(req.headers),Logger.INFO());
-    const authToken = req.headers['authtoken'];
-    if(authToken){
-      Logger.log("Token in header: " + authToken,Logger.INFO());
-      JwtAuth.verify(authToken,(err,decoded) => {
-        if(err != null){
-          Logger.log("Invalid Token: " + authToken,Logger.ERROR(''));
-          reject({
-            error: "Invalid token."
-          })
-        }else{
-          Logger.log("Token decoded.",Logger.INFO());
-          buserController.getByCreds(decoded.creds).then(authUser => {
-            Logger.log("Business User found: " + JSON.stringify(authUser),Logger.INFO());
-            if(authUser != null){
-              resolve(authUser);
-            }else{
-              Logger.log("Token has an invalid user: " + JSON.stringify(decoded.creds),Logger.WARNING());
-              reject({
-                error: 'Invalid User'
-              });
-            }
-          }).catch(fail => {
-            Logger.log("Business Users could not be retrieved from token: " + JSON.stringify(fail.errors),Logger.ERROR(''));
-            res.status(500).json({
-              errors: fail.errors.map(err => {error: err.message})
-            });
-          });
-        }
-      });
-    }else{
-      Logger.log("Missing token.",Logger.WARNING());
-      reject({
-        error: "Missing token"
-      })
-    }
-  });
-}
 
 router.post('/', (req, res) => {
   let user = req.body;
@@ -61,7 +20,7 @@ router.post('/', (req, res) => {
     }),Logger.INFO());
     res.status(201).json({
       id: retUser.id,
-      token: JwtAuth.token(user)
+      token: AuthHelper.signToken(user)
     });
   }).catch(fail => {
     Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR(''));
@@ -84,7 +43,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/me', (req, res) => {
-    authByToken(req,res).then(authUser => {
+  AuthHelper.verifyToken(req,res).then(authUser => {
       res.status(200).json(authUser);
     }).catch(error => {
       res.status(401).json(error);
@@ -103,7 +62,19 @@ router.get('/roles',(req,res) => {
   });
 });
 
-router.post('/role',(req,res) => {
+router.get('/roles/:name',(req,res) => {
+  roleController.getByName(req.params.name).then(role => {
+    Logger.log("Role retrieved: " + JSON.stringify(role),Logger.INFO());
+    res.status(200).json(role);
+  }).catch(fail => {
+    Logger.log("Role could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
+    res.status(500).json({
+      errors: fail.errors.map(err => {error: err.message})
+    });
+  });
+});
+
+router.post('/roles',(req,res) => {
   let role = req.body;
   roleController.create(role).then(retRole => {
     Logger.log("Role created: " + JSON.stringify(role),Logger.INFO());

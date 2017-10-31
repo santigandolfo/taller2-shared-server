@@ -223,9 +223,8 @@ paths:
      post:
       summary: FiUber business user registration
       tags:
-        - admin
-      security:
-        - AuthToken: []
+        - admin 
+        - app
       description: |
         Registers a FiUber user.
       parameters:
@@ -252,6 +251,7 @@ paths:
       summary: FiUber business user fetch
       tags:
         - admin
+        - app 
       security:
         - AuthToken: []
       description: |
@@ -391,7 +391,6 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors"
-  /business-users/role:          
     post:
       summary: FiUber business users's roles registration
       tags:
@@ -418,7 +417,26 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
-      
+            
+  /business-users/roles/{name}:
+    get:
+      summary: FiUber business users's roles listing
+      tags:
+        - app
+        - admin
+      security:
+        - AuthToken: []
+      description: |
+        Returns business users role with {name}
+      responses:
+        '200':
+          description: Role
+          schema:
+              $ref: "#/definitions/Role" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
       
 definitions:
   ApiInfo:

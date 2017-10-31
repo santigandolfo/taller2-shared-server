@@ -32,6 +32,10 @@ module.exports = class DBInitializer{
     return Role.count({where: {name: 'admin'}})
   }
 
+  appRoleCount(){
+    return Role.count({where: {name: 'app'}})
+  }
+
   adminCount(){
     return BusinessUser.count({where: {username: 'admin'}})
   }
@@ -43,11 +47,24 @@ module.exports = class DBInitializer{
   createDefaultAdminRole(){
     return Role.create({
       name: 'admin',
-      can_be_deleted: false,
+      can_buser_be_deleted: false,
+      create_roles: true,
+      delete_roles: true,
       create_bs_users: true,
       edit_bs_users: true,
-      edit_users: true,
+      delete_users: true,
       edit_settings: true
+    });
+  }
+
+  createDefaultAppRole(){
+    return Role.create({
+      name: 'app',
+      view_roles: false,
+      view_bs_users: false,
+      create_users: true,
+      delete_users: true,
+      edit_users: true
     });
   }
 
@@ -68,13 +85,14 @@ module.exports = class DBInitializer{
       this.initTables().then(() => {
         this.adminCount().then(adminCount => {
           if(adminCount == 0){
-            this.adminRoleCount().then(roleCount => {
-              if(roleCount == 0){
+            this.adminRoleCount().then(adminRoleCount => {
+              if(adminRoleCount == 0){
                 this.createDefaultAdminRole().then(role => {
                   this.createAdminWith(role);
                   Logger.log('Creating Admin with default admin role', Logger.INFO());
                 });
               }else{
+                Logger.log('Admin role already exists', Logger.INFO());
                 this.getAdminRole().then(role => {
                   this.createAdminWith(role);
                   Logger.log('Creating Admin with existing admin role', Logger.INFO());
@@ -84,6 +102,13 @@ module.exports = class DBInitializer{
           }else{
             Logger.log('Admin already exists', Logger.INFO());
           } 
+        });
+        this.appRoleCount().then(appRoleCount => {
+          if(appRoleCount == 0){
+            this.createDefaultAppRole();
+          }else{
+            Logger.log('App role already exists', Logger.INFO());
+          }
         });
       });
     },(err) => {

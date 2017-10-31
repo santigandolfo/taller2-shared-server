@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const JwtAuth = require('../auth/JwtAuth');
+const AuthHelper = require('./helpers/auth/AuthHelper');
 const Logger = require('../../log/Logger');
 
 const BusinessUserController = require('../../controllers/business-controller/BusinessUserController')
@@ -14,7 +14,7 @@ router.post('/token', (req, res) => {
       controller.existsByCreds(user).then(exist => {
         Logger.log(user.username + "exists? " + exist,Logger.INFO());
         if(exist){
-          res.status(201).json({ token: JwtAuth.token(user) });      
+          res.status(201).json({ token: AuthHelper.signToken(user) });      
         }else{
           res.status(404).send();
         }

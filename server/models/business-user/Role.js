@@ -8,9 +8,24 @@ const Role = sequelize.define('role', {
    allowNull: false,
    unique: true
   },
-  can_user_be_deleted: {
+  can_buser_be_deleted: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
+    allowNull: false,
+  },
+  view_roles: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  },
+  create_roles: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  delete_roles: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
     allowNull: false,
   },
   view_bs_users: {
@@ -36,6 +51,11 @@ const Role = sequelize.define('role', {
   view_users: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
+    allowNull: false,
+  },
+  create_users: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
     allowNull: false,
   },
   edit_users: {
