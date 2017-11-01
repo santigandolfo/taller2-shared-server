@@ -10,7 +10,7 @@ notifications:
        -  christiangelone@gmail.com
      on_failure: always 
      on_success: change
-install: "npm install && ng build"
+install: "npm install"
 script: 
   npm run server-test
 after_success:
