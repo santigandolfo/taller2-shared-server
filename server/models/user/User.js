@@ -1,6 +1,8 @@
 const _Sequelize = require('sequelize');
-const Sequelize = require('../db/sequelize');
+const Sequelize = require('../../db/sequelize');
 const sequelize = new Sequelize();
+
+const Car = require('./Car');
 
 const User = sequelize.define('user', {
   username: {
@@ -37,5 +39,7 @@ const User = sequelize.define('user', {
     type: _Sequelize.STRING
   }
 });
+
+User.hasMany(Car);
 
 module.exports = User;

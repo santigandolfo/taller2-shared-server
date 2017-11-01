@@ -1,5 +1,6 @@
 const sequelizeCheck = require('./sequelize_check');
-const User = require('../models/User');
+const User = require('../models/user/User');
+const Car = require('../models/user/Car');
 const BusinessUser = require('../models/business-user/BusinessUser');
 const Role = require('../models/business-user/Role');
 const sha256 = require('js-sha256').sha256;
@@ -19,9 +20,11 @@ module.exports = class DBInitializer{
     return new Promise(resolve => {
       let dropTable = this.environment == 'DEVELOPMENT';
       User.sync({ force: dropTable }).then(() => {
-        Role.sync({ force: dropTable }).then(() => {
-          BusinessUser.sync({ force: dropTable }).then(() =>{
-            resolve();
+        Car.sync({ force: dropTable }).then(() => {
+          Role.sync({ force: dropTable }).then(() => {
+            BusinessUser.sync({ force: dropTable }).then(() =>{
+              resolve();
+            });
           });
         });
       });
@@ -48,9 +51,10 @@ module.exports = class DBInitializer{
     return Role.create({
       name: 'admin',
       can_buser_be_deleted: false,
+      view_roles: true,
       create_roles: true,
       delete_roles: true,
-      create_bs_users: true,
+      assign_roles: true,
       edit_bs_users: true,
       delete_users: true,
       edit_settings: true
@@ -88,14 +92,15 @@ module.exports = class DBInitializer{
             this.adminRoleCount().then(adminRoleCount => {
               if(adminRoleCount == 0){
                 this.createDefaultAdminRole().then(role => {
+                  Logger.log('Admin role created', Logger.INFO());
                   this.createAdminWith(role);
-                  Logger.log('Creating Admin with default admin role', Logger.INFO());
+                  Logger.log('Admin created with default admin role', Logger.INFO());
                 });
               }else{
                 Logger.log('Admin role already exists', Logger.INFO());
                 this.getAdminRole().then(role => {
                   this.createAdminWith(role);
-                  Logger.log('Creating Admin with existing admin role', Logger.INFO());
+                  Logger.log('Admin created with existing admin role', Logger.INFO());
                 });
               }
             });
@@ -106,6 +111,7 @@ module.exports = class DBInitializer{
         this.appRoleCount().then(appRoleCount => {
           if(appRoleCount == 0){
             this.createDefaultAppRole();
+            Logger.log('App role created', Logger.INFO());
           }else{
             Logger.log('App role already exists', Logger.INFO());
           }

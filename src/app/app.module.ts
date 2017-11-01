@@ -1,118 +1,67 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'
-import { HttpModule } from '@angular/http'
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
-//Material Design
-import {   
-  MdAutocompleteModule,
-  MdButtonModule,
-  MdButtonToggleModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdChipsModule,
-  MdDatepickerModule,
-  MdDialogModule,
-  MdExpansionModule,
-  MdGridListModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdMenuModule,
-  MdNativeDateModule,
-  MdPaginatorModule,
-  MdProgressBarModule,
-  MdProgressSpinnerModule,
-  MdRadioModule,
-  MdRippleModule,
-  MdSelectModule,
-  MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
-  MdSnackBarModule,
-  MdSortModule,
-  MdTableModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule,
-  MdStepperModule} from '@angular/material';
-import { CdkTableModule } from '@angular/cdk/table';
-
-//Components
+// Components
 import { AppComponent } from './app.component';
-import { UsersComponent} from './components/users/users.component';
-import { UserEditModal } from "./components/users/userseditmodal.component";
-import { NotFoundComponent } from './components/notfound/notfound.component';
-import { HomeComponent } from './components/home/home.component';
+import { BusinessUsersListComponent } from './components/pages/business-user/list/business-users.list.component';
+import { BusinessUsersShowComponent } from './components/pages/business-user/show/business-users.show.component';
+import { BusinessUsersEditComponent } from './components/pages/business-user/edit/business-users.edit.component';
+import { BusinessUsersCreateComponent } from './components/pages/business-user/create/business-users.create.component';
+import { NotFoundComponent } from './components/pages/notfound/notfound.component';
+import { HomeComponent } from './components/pages/home/home.component';
 
-//Services
-import { UsersService } from './services/users.service'
+import { SideBarComponent } from './components/utils/sidebar.component';
 
-//Routes
-let routes = [
+// Services
+import { BusinessUsersService } from './services/business-users.service';
+
+// Routes
+const routes: object[] = [
   {
     path: '',
     component: HomeComponent
   },
   {
-    path: 'users',
-    component: UsersComponent
+    path: 'business-users',
+    component: BusinessUsersListComponent
+  },
+  {
+    path: 'business-users/create',
+    component: BusinessUsersCreateComponent
+  },
+  {
+    path: 'business-users/show/:id',
+    component: BusinessUsersShowComponent
+  },
+  {
+    path: 'business-users/edit/:id',
+    component: BusinessUsersEditComponent
   },
   { path: '**', component:  NotFoundComponent }
-]
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent,
-    UserEditModal,
+    BusinessUsersListComponent,
+    BusinessUsersShowComponent,
+    BusinessUsersEditComponent,
+    BusinessUsersCreateComponent,
+    SideBarComponent,
     NotFoundComponent,
     HomeComponent
   ],
-  entryComponents: [UserEditModal],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    CdkTableModule,
-    MdAutocompleteModule,
-    MdButtonModule,
-    MdButtonToggleModule,
-    MdCardModule,
-    MdCheckboxModule,
-    MdChipsModule,
-    MdStepperModule,
-    MdDatepickerModule,
-    MdDialogModule,
-    MdExpansionModule,
-    MdGridListModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdMenuModule,
-    MdNativeDateModule,
-    MdPaginatorModule,
-    MdProgressBarModule,
-    MdProgressSpinnerModule,
-    MdRadioModule,
-    MdRippleModule,
-    MdSelectModule,
-    MdSidenavModule,
-    MdSliderModule,
-    MdSlideToggleModule,
-    MdSnackBarModule,
-    MdSortModule,
-    MdTableModule,
-    MdTabsModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    BrowserAnimationsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [UsersService],
+  providers: [BusinessUsersService],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
-}
+export class AppModule {}

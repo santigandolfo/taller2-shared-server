@@ -1,19 +1,23 @@
-const User = require('../../models/User');
+const User = require('../../models/user/User');
 const sha256 = require('js-sha256').sha256;
 module.exports = class UserController {
 
   constructor(){}
 
-  all(aLimit){
-    aLimit = typeof aLimit  !== 'undefined' ? aLimit : 100;
+  all(aOffset,aLimit){
+    aOffset = typeof aOffset !== 'undefined' ? aOffset : 0;
+    aLimit = typeof aLimit !== 'undefined' ? aLimit : 100;
     return User.findAll({
+      order: [
+        ['username','ASC']
+      ],
       attributes: {
         exclude: [
           'password',
           'updatedAt',
           'createdAt'
         ]
-      },limit: aLimit});
+      },offset: aOffset,limit: aLimit});
   }
 
   isValid(user){
@@ -48,7 +52,7 @@ module.exports = class UserController {
           'createdAt'
         ]
       }
-    })
+    });
   }
 
   getById(anId){

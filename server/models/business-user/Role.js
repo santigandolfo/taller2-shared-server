@@ -15,10 +15,15 @@ const Role = sequelize.define('role', {
   },
   view_roles: {
     type: _Sequelize.BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
     allowNull: false,
   },
   create_roles: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  assign_roles: {
     type: _Sequelize.BOOLEAN,
     defaultValue: false,
     allowNull: false,
@@ -31,11 +36,6 @@ const Role = sequelize.define('role', {
   view_bs_users: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
-    allowNull: false,
-  },
-  create_bs_users: {
-    type: _Sequelize.BOOLEAN,
-    defaultValue: false,
     allowNull: false,
   },
   edit_bs_users: {
