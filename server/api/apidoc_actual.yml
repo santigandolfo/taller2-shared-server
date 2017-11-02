@@ -53,9 +53,16 @@ paths:
             $ref: "#/definitions/Errors"
   /auth/token:
     post:
-      summary: FiUber users listing
+      summary: FiUber business user
+      parameters:
+        - description: "Credential fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/Credential" 
       description: |
-        Returns all the registrated users (drivers and passengers).
+        Returns Business User token
       responses:
         '201':
           description: Token
