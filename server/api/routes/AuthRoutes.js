@@ -26,7 +26,9 @@ router.post('/token', (req, res) => {
       });
     }else{
       Logger.log('Bad request in /token: ' + user,Logger.WARNING());
-      res.status(400).send();
+      res.status(400).json({
+        error: 'bad formed credentials'
+      });
     }
   }catch(err){
     Logger.log("Token for (" + user + ") could not be created: ",Logger.ERROR(err));

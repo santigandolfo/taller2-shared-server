@@ -51,6 +51,28 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors"
+  /auth/token:
+    post:
+      summary: FiUber users listing
+      security:
+        - AuthToken: []
+      description: |
+        Returns all the registrated users (drivers and passengers).
+      responses:
+        '201':
+          description: Token
+          schema:
+            properties:
+              token:
+                type: string
+        '400':
+          description: Bad request
+          schema:
+            $ref: "#/definitions/Error"
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors"       
             
   /users:
     get:
@@ -419,6 +441,12 @@ paths:
             $ref: "#/definitions/Errors" 
             
   /business-users/roles/{name}:
+    parameters:
+      - name: name
+        in: path
+        description: "roles's name"
+        required: true
+        type: integer
     get:
       summary: FiUber business users's roles listing
       tags:

@@ -7,10 +7,10 @@ const sha256 = require('js-sha256').sha256;
 const Logger = require('../log/Logger');
 
 let instance = null;
-module.exports = class DBInitializer{  
-  constructor(environment) {
+module.exports = class DBInitializer {  
+  constructor() {
     if(!instance){
-        this.environment = environment;
+        this.environment = process.env.ENV || 'DEVELOPMENT';
         instance = this;
     }
     return instance;

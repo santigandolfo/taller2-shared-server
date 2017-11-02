@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { BusinessUser } from '../entities/business-user.entity';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 export class BusinessUsersService {
   constructor(private http: Http) { }
 
-  getToken(creds) {
+  private getToken(creds) {
     return this.http.post('api/auth/token',creds).map(res => {
       return {
         success: res.status === 201,
@@ -17,10 +17,50 @@ export class BusinessUsersService {
     }).toPromise();
   }
 
-  saveTokenLocally(token: string) {
+  private saveTokenLocally(token: string) {
     if (token) {
       localStorage.setItem('auth_token', token);
     }
+  }
+  private getLocalToken() {
+    return localStorage.getItem('auth_token');
+  }
+
+  // login() {
+  //   return new Promise((resolve, reject) => {
+  //     const token = this.getLocalToken();
+  //     if (token) {
+  //       const headers = new Headers();
+  //       headers.append('AuthToken', token);
+  //       this.me(headers).then(res => {
+  //         if (res.success) {
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+
+  private me(theHeaders) {
+    return this.http.post('api/business-users/me', null, { headers: theHeaders }).map(res => {
+      return {
+        success: res.status === 200,
+        status: res.status,
+        json: res.json()
+      };
+    }).toPromise();
+  }
+
+  authenticate(creds) {
+    return new Promise((resolve, reject) => {
+      this.getToken(creds).then(res => {
+        if (res.success) {
+          this.saveTokenLocally(res.json.token);
+          resolve();
+        }else {
+          reject();
+        }
+      });
+    });
   }
 
   getAll(): Promise<any> {

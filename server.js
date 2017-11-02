@@ -39,7 +39,7 @@ const server = http.createServer(app);
 /*
  * Initializes DB
 */
-new DBInitializer().initialize(environment || 'DEVELOPMENT');
+new DBInitializer().initialize();
 
 /**
  * Listen on provided port, on all network interfaces.

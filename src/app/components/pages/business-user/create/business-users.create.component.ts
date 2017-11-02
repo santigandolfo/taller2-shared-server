@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class BusinessUsersCreateComponent implements OnInit {
 
   user: BusinessUser | null;
-  constructor(private router: Router, private usersService: BusinessUsersService) {}
+  constructor(private router: Router, private businessUsersService: BusinessUsersService) {}
 
   ngOnInit() {
     this.user = {

@@ -5,7 +5,7 @@ const db = {
     DEVELOPMENT: new _Sequelize(db_url,{
         maxConcurrentQueries: 100,
         logging: true
-  })
+    })
 };
 
 let instance = null;
