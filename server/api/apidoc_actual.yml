@@ -236,6 +236,10 @@ paths:
             type: array
             items:
               $ref: "#/definitions/BusinessUser" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"  
         '500':
           description: Server error
           schema:
@@ -310,6 +314,10 @@ paths:
           description: Business User
           schema:
               $ref: "#/definitions/BusinessUser" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"  
         '404':
           description: Business User not found
           schema:
@@ -336,6 +344,10 @@ paths:
       responses:
         '200':
           description: Business User updated
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"  
         '500':
           description: Server error
           schema:
@@ -351,6 +363,10 @@ paths:
       responses:
         '200':
           description: User deleted
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"          
         '404':
           description: User not found
           schema:
@@ -382,6 +398,10 @@ paths:
       responses:
         '200':
           description: Role assigned to Business User
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"            
         '404':
           description: Business User or Role not found
           schema:
@@ -407,6 +427,10 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Role" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"                
         '500':
           description: Server error
           schema:
@@ -433,6 +457,10 @@ paths:
             properties:
               id:
                 $ref: "#/definitions/Id" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"                  
         '500':
           description: Server error
           schema:
@@ -459,6 +487,10 @@ paths:
           description: Role
           schema:
               $ref: "#/definitions/Role" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"  
         '500':
           description: Server error
           schema:
