@@ -1,6 +1,7 @@
 export interface Role {
    name: boolean;
-   can_buser_be_deleted: boolean;
+   deletable: boolean;
+   buser_deletable: boolean;
    view_roles: boolean;
    create_roles: boolean;
    delete_roles: boolean;

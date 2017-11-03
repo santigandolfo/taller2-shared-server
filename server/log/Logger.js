@@ -14,7 +14,7 @@ module.exports = class Logger {
     let relevance = "(INFO)";
     return {
       log: (msg) => {
-        console.log(chalk.green(relevance + " [" + new Date() + "]> " + msg));
+        console.log(chalk.hex('#0DBC79')(relevance + " [" + new Date() + "]> " + msg));
       }
     };
   }

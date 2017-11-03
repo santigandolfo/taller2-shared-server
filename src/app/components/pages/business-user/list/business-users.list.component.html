@@ -1,13 +1,30 @@
-<side-bar></side-bar>
+<side-bar [user]="authUser"></side-bar>
 <div class="row">
-<div class="col s3">
-  
-</div>
-<div class="col s12">
-  <h2>
-    List Business User
-  </h2>
-</div>
+  <div class="col offset-l3 l9">
+      <table class="bordered">
+          <thead>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Role</th>
+                <th>Actions</th>  
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let buser of busers">
+              <td>@{{buser.username}}</td>
+              <td>{{buser.name}}</td>
+              <td>{{buser.surname}}</td>
+              <td>{{buser.role?.name}}</td>
+              <td>
+                <i (click)="edit(buser)" class="material-icons action">mode_edit</i>
+                <i (click)="delete(buser.id)" *ngIf="deletable(buser)" class="material-icons action">delete</i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
 </div>
 
 

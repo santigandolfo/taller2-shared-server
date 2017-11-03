@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BusinessUsersService } from '../../services/business-users.service';
+import { BusinessUser } from '../../entities/business-user.entity';
+import { Router } from '@angular/router';
 @Component({
   selector: 'side-bar',
   template: `
@@ -9,9 +11,9 @@ import { BusinessUsersService } from '../../services/business-users.service';
           <div class="background">
             <img src="assets/img/sidebar_background.jpg">
           </div>
-          <a href="#!user"><img class="circle" src="http://placehold.it/72x72"></a>
-          <a href="#!name"><span class="white-text name nomargin">{{ username }}</span></a>
-          <a href="#!email"><span class="white-text email nomargin">{{ email }}</span></a>
+          <img class="circle" src="http://placehold.it/72x72">
+          <a href="!#"><span class="white-text name nomargin">{{ user.name }}  {{ user.surname }}</span></a>
+          <span class="white-text email nomargin">@{{ user.username }} ({{user.role.name}})</span>
         </div>
       </li>
       <li>
@@ -24,18 +26,36 @@ import { BusinessUsersService } from '../../services/business-users.service';
           <i class="material-icons">person_pin_circle</i>Users
         </a>
       </li>
+      <li>
+      <a href="" (click)="logout()">
+        <i class="material-icons">exit_to_app</i>Logout
+      </a>
+    </li>
     </ul>
   `,
   styles: [``]
 })
 export class SideBarComponent implements OnInit {
 
-  private username: string;
-  private email: string;
-  constructor(private businessUsersService: BusinessUsersService) { }
+  @Input() user: BusinessUser | any;
+  constructor(private router: Router, private businessUsersService: BusinessUsersService) { }
 
   ngOnInit() {
-    this.username = 'Christian Angelone';
-    this. email = 'christiangelone@gmailcom';
+    if (this.user == null) {
+      this.user = {
+        username: '',
+        name: '',
+        surname: '',
+        role: {
+          name: ''
+        }
+      };
+    }
+  }
+
+  logout() {
+    this.businessUsersService.logout().then(() => {
+      this.router.navigate(['/']);
+    });
   }
 }

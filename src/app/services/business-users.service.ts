@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { BusinessUser } from '../entities/business-user.entity';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -22,32 +22,57 @@ export class BusinessUsersService {
       localStorage.setItem('auth_token', token);
     }
   }
+
   private getLocalToken() {
-    return localStorage.getItem('auth_token');
+    const token = localStorage.getItem('auth_token');
+    return token;
   }
 
-  // login() {
-  //   return new Promise((resolve, reject) => {
-  //     const token = this.getLocalToken();
-  //     if (token) {
-  //       const headers = new Headers();
-  //       headers.append('AuthToken', token);
-  //       this.me(headers).then(res => {
-  //         if (res.success) {
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
+  private authHeader(): Headers {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('authtoken', this.getLocalToken());
+    console.log(JSON.stringify(headers));
+    return headers;
+  }
 
-  private me(theHeaders) {
-    return this.http.post('api/business-users/me', null, { headers: theHeaders }).map(res => {
+  private me() {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.get('api/business-users/me', options)
+    .map(res => {
       return {
         success: res.status === 200,
         status: res.status,
         json: res.json()
       };
     }).toPromise();
+  }
+
+  isLoggedIn(): Promise<BusinessUser> {
+    return new Promise((resolve, reject) => {
+      const token = this.getLocalToken();
+      if (token == null) {
+        reject();
+      }else {
+        this.me().then(res => {
+          if (res.success) {
+            resolve(res.json);
+          }else {
+            reject();
+          }
+        }).catch(() => {
+          reject();
+        });
+      }
+    });
+  }
+
+  logout() {
+    return new Promise(resolve => {
+      localStorage.removeItem('auth_token');
+      resolve();
+    });
   }
 
   authenticate(creds) {
@@ -64,7 +89,9 @@ export class BusinessUsersService {
   }
 
   getAll(): Promise<any> {
-    return this.http.get('api/business-users').map(res =>{
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.get('api/business-users', options).map(res => {
       return {
         success: res.status === 200,
         json: res.json()
@@ -73,7 +100,9 @@ export class BusinessUsersService {
   }
 
   getById(id): Promise<any> {
-    return this.http.get('api/users/' + id).map(res => {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.get('api/business-users/' + id, options).map(res => {
       return {
         success: res.status === 200,
         json: res.json()
@@ -82,7 +111,9 @@ export class BusinessUsersService {
   }
 
   update(id, user): Promise<any> {
-    return this.http.put('api/users/' + id, user).map(res => {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.put('api/business-users/' + id, user, options).map(res => {
       return {
         success: res.status === 200,
         json: res.json()
@@ -91,7 +122,9 @@ export class BusinessUsersService {
   }
 
   delete(id): Promise<any> {
-    return this.http.delete('api/users/' + id).map(res => {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.delete('api/business-users/' + id, options).map(res => {
       return {
         success: res.status === 200,
         json: res.json()

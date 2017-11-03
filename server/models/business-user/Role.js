@@ -8,7 +8,12 @@ const Role = sequelize.define('role', {
    allowNull: false,
    unique: true
   },
-  can_buser_be_deleted: {
+  deletable: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  },
+  buser_deletable: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
     allowNull: false,

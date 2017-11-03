@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "watch": "nodemon server.js",
     "build^start": "ng build && node server.js",
     "server-test": "mocha -c 'server/**/*.test.js'",
     "cover": "istanbul cover _mocha 'server/**/*.test.js'",

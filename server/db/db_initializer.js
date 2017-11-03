@@ -50,13 +50,15 @@ module.exports = class DBInitializer {
   createDefaultAdminRole(){
     return Role.create({
       name: 'admin',
-      can_buser_be_deleted: false,
+      deletable: false,
+      buser_deletable: false,
       view_roles: true,
       create_roles: true,
       delete_roles: true,
       assign_roles: true,
       edit_bs_users: true,
-      delete_users: true,
+      delete_bs_users: true,
+      edit_users: true,
       edit_settings: true
     });
   }
@@ -64,6 +66,7 @@ module.exports = class DBInitializer {
   createDefaultAppRole(){
     return Role.create({
       name: 'app',
+      deletable: false,
       view_roles: false,
       view_bs_users: false,
       create_users: true,

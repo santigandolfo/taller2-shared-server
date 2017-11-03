@@ -10,13 +10,28 @@ import { Router } from '@angular/router';
 })
 export class BusinessUsersListComponent implements OnInit {
 
-  users: BusinessUser[] | null;
-  constructor(private router: Router, private usersService: BusinessUsersService) {}
+  authUser: BusinessUser | null;
+  busers: BusinessUser[] | null;
+  constructor(private router: Router, private businessUsersService: BusinessUsersService) {
+    businessUsersService.isLoggedIn().then(user => {
+      this.authUser = user;
+    }).catch(() => {
+      this.router.navigate(['/']);
+    });
+  }
 
   ngOnInit() {
-    this.usersService.getAll().then((users: BusinessUser[]) =>
-      this.users = users
-    );
+    this.businessUsersService.getAll().then(res => {
+      this.busers = res.json;
+    });
+  }
+
+  deletable(buser) {
+    if (buser.role != null) {
+      return buser.role.buser_deletable && this.authUser.role.delete_bs_users;
+    }else {
+      return true;
+    }
   }
 
   edit(buser: BusinessUser) {
@@ -24,10 +39,10 @@ export class BusinessUsersListComponent implements OnInit {
   }
 
   delete(anId) {
-    this.usersService.delete(anId).then(res => {
+    this.businessUsersService.delete(anId).then(res => {
       if (res.success) {
         console.log('deleted');
-        this.users = this.users.filter(user => {
+        this.busers = this.busers.filter(user => {
           return user.id !== anId;
         });
       }else {
