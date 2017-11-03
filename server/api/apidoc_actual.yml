@@ -750,7 +750,11 @@ definitions:
         type: string
         description: |
           Role's name
-      can_user_be_deleted:
+      deletable:
+        type: boolean
+        description: |
+          Allows (true) or Forbids (false) this role to be deletable.
+      buser_deletable:
         type: boolean
         description: |
           Allows (true) or Forbids (false) business user to be deletable.
