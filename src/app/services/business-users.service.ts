@@ -32,7 +32,7 @@ export class BusinessUsersService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('authtoken', this.getLocalToken());
-    console.log(JSON.stringify(headers));
+    //console.log(JSON.stringify(headers));
     return headers;
   }
 
@@ -127,7 +127,7 @@ export class BusinessUsersService {
     return this.http.delete('api/business-users/' + id, options).map(res => {
       return {
         success: res.status === 200,
-        json: res.json()
+        json: {}
       };
     }).toPromise();
   }
