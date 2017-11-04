@@ -1,4 +1,4 @@
-FROM node:6.11.5
+FROM node:6.11.2
 MAINTAINER Taller2 Team APGB
 
 COPY . /nodeapp
