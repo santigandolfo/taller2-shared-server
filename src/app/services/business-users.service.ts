@@ -125,7 +125,7 @@ export class BusinessUsersService {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});
     return this.http.delete('api/business-users/' + id, options).map(res => {
-      return res.json();
+      return res;
     }).toPromise();
   }
 }

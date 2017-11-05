@@ -18,7 +18,7 @@ module.exports = class DBInitializer {
 
   initTables(){
     return new Promise(resolve => {
-      let dropTable = this.environment == 'DEVELOPMENT';
+      let dropTable = false;//this.environment == 'DEVELOPMENT';
       User.sync({ force: dropTable }).then(() => {
         Car.sync({ force: dropTable }).then(() => {
           Role.sync({ force: dropTable }).then(() => {

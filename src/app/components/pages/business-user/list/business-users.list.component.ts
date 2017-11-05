@@ -50,14 +50,20 @@ export class BusinessUsersListComponent implements OnInit {
 
   delete(anId) {
     this.businessUsersService.delete(anId).then(res => {
-      if (res.success) {
-        console.log('deleted');
+        this.notificationBarService.create({
+          message: 'Deletion succeed',
+          type: NotificationType.Success,
+          hideDelay: 3000,
+        });
         this.busers = this.busers.filter(user => {
           return user.id !== anId;
         });
-      }else {
-        console.log(JSON.stringify(res.json));
-      }
+    }).catch(err => {
+      this.notificationBarService.create({
+        message: 'Deletion failed: ' + err,
+        type: NotificationType.Error,
+        hideDelay: 3000,
+      });
     });
   }
 }
