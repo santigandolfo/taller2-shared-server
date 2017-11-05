@@ -18,7 +18,7 @@ module.exports = class DBInitializer {
 
   initTables(){
     return new Promise(resolve => {
-      let dropTable = false;//this.environment == 'DEVELOPMENT';
+      let dropTable = this.environment == 'DEVELOPMENT';
       User.sync({ force: dropTable }).then(() => {
         Car.sync({ force: dropTable }).then(() => {
           Role.sync({ force: dropTable }).then(() => {
@@ -56,6 +56,7 @@ module.exports = class DBInitializer {
       create_roles: true,
       delete_roles: true,
       assign_roles: true,
+      create_bs_users: true,
       edit_bs_users: true,
       delete_bs_users: true,
       edit_users: true,
@@ -86,39 +87,61 @@ module.exports = class DBInitializer {
     });
   }
 
+  createAppWith(aRole){
+    BusinessUser.create({
+      username: 'appserver',
+      password: sha256('appserver'),
+      name: 'App',
+      surname: 'Server'
+    }).then(user => {
+      user.setRole(aRole);
+    });
+  }
+
+  initAdmin(){
+    this.adminCount().then(adminCount => {
+      if(adminCount == 0){
+        this.adminRoleCount().then(adminRoleCount => {
+          if(adminRoleCount == 0){
+            this.createDefaultAdminRole().then(role => {
+              Logger.log('Admin role created', Logger.INFO());
+              this.createAdminWith(role);
+              Logger.log('Admin created with default admin role', Logger.INFO());
+            });
+          }else{
+            Logger.log('Admin role already exists', Logger.INFO());
+            this.getAdminRole().then(role => {
+              this.createAdminWith(role);
+              Logger.log('Admin created with existing admin role', Logger.INFO());
+            });
+          }
+        });
+      }else{
+        Logger.log('Admin already exists', Logger.INFO());
+      } 
+    });
+  }
+
+  initApp(){
+    this.appRoleCount().then(appRoleCount => {
+      if(appRoleCount == 0){
+        this.createDefaultAppRole().then(role => {
+          Logger.log('App role created', Logger.INFO());
+          this.createAppWith(role)
+          Logger.log('App created with default app role', Logger.INFO()); 
+        });
+      }else{
+        Logger.log('App role already exists', Logger.INFO());
+      }
+    });
+  }
+
   initialize(){
     sequelizeCheck.dbCheck(() => {
       Logger.log('DB connection is up and running.', Logger.INFO());
       this.initTables().then(() => {
-        this.adminCount().then(adminCount => {
-          if(adminCount == 0){
-            this.adminRoleCount().then(adminRoleCount => {
-              if(adminRoleCount == 0){
-                this.createDefaultAdminRole().then(role => {
-                  Logger.log('Admin role created', Logger.INFO());
-                  this.createAdminWith(role);
-                  Logger.log('Admin created with default admin role', Logger.INFO());
-                });
-              }else{
-                Logger.log('Admin role already exists', Logger.INFO());
-                this.getAdminRole().then(role => {
-                  this.createAdminWith(role);
-                  Logger.log('Admin created with existing admin role', Logger.INFO());
-                });
-              }
-            });
-          }else{
-            Logger.log('Admin already exists', Logger.INFO());
-          } 
-        });
-        this.appRoleCount().then(appRoleCount => {
-          if(appRoleCount == 0){
-            this.createDefaultAppRole();
-            Logger.log('App role created', Logger.INFO());
-          }else{
-            Logger.log('App role already exists', Logger.INFO());
-          }
-        });
+        this.initAdmin();
+        this.initApp();
       });
     },(err) => {
       Logger.log('Unable to connect to the database', Logger.ERROR(err));

@@ -19,9 +19,15 @@ export class BusinessUsersListComponent implements OnInit {
   ) {
     businessUsersService.isLoggedIn().then(user => {
       this.authUser = user;
+      console.log(this.authUser);
     }).catch(() => {
       this.router.navigate(['/']);
     });
+  }
+
+  canCreate() {
+    const can = this.authUser.role != null && this.authUser.role.create_bs_users;
+    return can;
   }
 
   ngOnInit() {

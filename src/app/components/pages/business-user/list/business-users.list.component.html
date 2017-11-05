@@ -26,7 +26,7 @@
         </table>
   </div>
 </div>
-<div class="fixed-action-btn" style="bottom: 45px; right: 35px;">
+<div *ngIf="canCreate()" class="fixed-action-btn" style="bottom: 45px; right: 35px;">
   <a routerLink="/business-users/create" class="btn-floating btn-large red">
     <i class="large material-icons">add</i>
   </a>

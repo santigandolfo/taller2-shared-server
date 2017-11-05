@@ -43,6 +43,11 @@ const Role = sequelize.define('role', {
     defaultValue: true,
     allowNull: false,
   },
+  create_bs_users: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
   edit_bs_users: {
     type: _Sequelize.BOOLEAN,
     defaultValue: false,
