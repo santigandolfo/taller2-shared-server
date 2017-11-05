@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'side-bar',
   template: `
-    <ul id="slide-out" class="side-nav fixed">
+    <ul id="slide-out" class="side-nav fixed margintop25">
       <li>
         <div class="user-view">
           <div class="background">
@@ -33,7 +33,11 @@ import { Router } from '@angular/router';
     </li>
     </ul>
   `,
-  styles: [``]
+  styles: [`
+    .margintop25{
+      margin-top: 25px;
+    }
+  `]
 })
 export class SideBarComponent implements OnInit {
 

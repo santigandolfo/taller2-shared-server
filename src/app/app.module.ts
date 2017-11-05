@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
+//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-
+import { NotificationBarModule } from 'angular2-notification-bar';
 // Components
 import { AppComponent } from './app.component';
 import { BusinessUsersListComponent } from './components/pages/business-user/list/business-users.list.component';
@@ -58,6 +59,7 @@ const routes: object[] = [
     BrowserModule,
     FormsModule,
     HttpModule,
+    NotificationBarModule,
     RouterModule.forRoot(routes)
   ],
   providers: [BusinessUsersService],

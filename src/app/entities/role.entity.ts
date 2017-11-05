@@ -1,4 +1,5 @@
 export interface Role {
+   id?: number;
    name: boolean;
    deletable: boolean;
    buser_deletable: boolean;

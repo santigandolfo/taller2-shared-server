@@ -10,7 +10,6 @@ module.exports = class BusinessUserController {
       model: Role, 
       attributes: {
         exclude: [
-          'id',
           'updatedAt',
           'createdAt'
         ]

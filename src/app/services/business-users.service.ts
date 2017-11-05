@@ -12,7 +12,7 @@ export class BusinessUsersService {
     return this.http.post('api/auth/token',creds).map(res => {
       return {
         success: res.status === 201,
-        json: res.json()
+        json: () => res.json()
       };
     }).toPromise();
   }
@@ -32,7 +32,6 @@ export class BusinessUsersService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('authtoken', this.getLocalToken());
-    //console.log(JSON.stringify(headers));
     return headers;
   }
 
@@ -44,7 +43,7 @@ export class BusinessUsersService {
       return {
         success: res.status === 200,
         status: res.status,
-        json: res.json()
+        json: () => res.json()
       };
     }).toPromise();
   }
@@ -57,7 +56,7 @@ export class BusinessUsersService {
       }else {
         this.me().then(res => {
           if (res.success) {
-            resolve(res.json);
+            resolve(res.json());
           }else {
             reject();
           }
@@ -79,11 +78,13 @@ export class BusinessUsersService {
     return new Promise((resolve, reject) => {
       this.getToken(creds).then(res => {
         if (res.success) {
-          this.saveTokenLocally(res.json.token);
-          resolve();
+          this.saveTokenLocally(res.json().token);
+          resolve(res.json);
         }else {
           reject();
         }
+      }).catch(err => {
+        reject(err.json());
       });
     });
   }
@@ -92,10 +93,15 @@ export class BusinessUsersService {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});
     return this.http.get('api/business-users', options).map(res => {
-      return {
-        success: res.status === 200,
-        json: res.json()
-      };
+      return res.json();
+    }).toPromise();
+  }
+
+  getAllRoles(): Promise<any> {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.get('api/business-users/roles', options).map(res => {
+      return res.json();
     }).toPromise();
   }
 
@@ -103,21 +109,15 @@ export class BusinessUsersService {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});
     return this.http.get('api/business-users/' + id, options).map(res => {
-      return {
-        success: res.status === 200,
-        json: res.json()
-      };
+      return res.json();
     }).toPromise();
   }
 
-  update(id, user): Promise<any> {
+  update(user, id): Promise<any> {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});
     return this.http.put('api/business-users/' + id, user, options).map(res => {
-      return {
-        success: res.status === 200,
-        json: res.json()
-      };
+      return res;
     }).toPromise();
   }
 
@@ -125,10 +125,7 @@ export class BusinessUsersService {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});
     return this.http.delete('api/business-users/' + id, options).map(res => {
-      return {
-        success: res.status === 200,
-        json: {}
-      };
+      return res.json();
     }).toPromise();
   }
 }

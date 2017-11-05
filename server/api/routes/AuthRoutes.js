@@ -16,7 +16,9 @@ router.post('/token', (req, res) => {
         if(exist){
           res.status(201).json({ token: AuthHelper.signToken(user) });      
         }else{
-          res.status(404).send();
+          res.status(404).json({
+            error: 'incorrect username and/or password' 
+          });
         }
       }).catch(fail => {
         Logger.log("Token for (" + user.username + ") could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());

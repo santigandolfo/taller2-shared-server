@@ -1,5 +1,5 @@
 <side-bar [user]="authUser"></side-bar>
-<div class="row">
+<div class="row user-list">
   <div class="col offset-l3 l9">
       <table class="bordered">
           <thead>
@@ -19,12 +19,17 @@
               <td>{{buser.role?.name}}</td>
               <td>
                 <i (click)="edit(buser)" class="material-icons action">mode_edit</i>
-                <i (click)="delete(buser.id)" *ngIf="deletable(buser)" class="material-icons action">delete</i>
+                <i (click)="deletionAttempt(buser)" *ngIf="deletable(buser)" class="material-icons action">delete</i>
               </td>
             </tr>
           </tbody>
         </table>
   </div>
+</div>
+<div class="fixed-action-btn" style="bottom: 45px; right: 35px;">
+  <a routerLink="/business-users/create" class="btn-floating btn-large red">
+    <i class="large material-icons">add</i>
+  </a>
 </div>
 
 

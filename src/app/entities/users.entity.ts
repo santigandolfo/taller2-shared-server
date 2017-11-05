@@ -1,6 +1,6 @@
 import { Car } from './car.entity';
 export interface User {
-  id: number;
+  id?: number;
   username: string;
   password: string;
   type: string;
@@ -10,5 +10,5 @@ export interface User {
   email: string;
   birthdate: string;
   image: string;
-  car: Car;
+  cars: Car[];
 }
