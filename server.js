@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const DBInitializer = require('./server/db/db_initializer');
 const environment = process.env.ENV
@@ -9,6 +10,9 @@ const environment = process.env.ENV
 const api = require('./server/api/api');
 
 const app = express();
+
+// Adds log of every request
+app.use(morgan('combined'));
 
 // Parsers for POST data
 app.use(bodyParser.json());

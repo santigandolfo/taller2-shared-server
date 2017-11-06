@@ -11,7 +11,7 @@ const apiAuthor = process.env.API_AUTHOR;
 const apiReleaseDate = process.env.API_RELEASE_DATE;
 
 router.use((req,res,next) => {
-  Logger.log("Request sent from: " + req.headers['user-agent'],Logger.INFO());
+  Logger.log("Request Headers:" + JSON.stringify(req.headers),Logger.INFO());
   res.header('api-version',apiVersion);
   next();
 });
