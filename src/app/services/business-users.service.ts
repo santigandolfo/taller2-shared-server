@@ -121,6 +121,14 @@ export class BusinessUsersService {
     }).toPromise();
   }
 
+  create(user): Promise<any> {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.post('api/business-users', user, options).map(res => {
+      return res.json();
+    }).toPromise();
+  }
+
   delete(id): Promise<any> {
     const theHeaders = this.authHeader();
     const options = new RequestOptions({ headers: theHeaders});

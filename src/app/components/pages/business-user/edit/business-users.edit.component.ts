@@ -14,9 +14,7 @@ export class BusinessUsersEditComponent implements OnInit {
 
   authUser: BusinessUser | null;
   buser: BusinessUser | null = {
-    id: null,
     username: '',
-    password: '',
     name: '',
     surname: '',
     role: null

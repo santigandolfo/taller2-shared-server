@@ -48,6 +48,10 @@ export class BusinessUsersListComponent implements OnInit {
     this.router.navigate(['/business-users/edit', buser.id]);
   }
 
+  show(buser: BusinessUser) {
+    this.router.navigate(['/business-users/show', buser.id]);
+  }
+
   deletionAttempt(user) {
     if (confirm('Are you sure you want to delete @' + user.username + '?')) {
       this.delete(user.id);

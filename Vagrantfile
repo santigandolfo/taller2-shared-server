@@ -74,33 +74,40 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
      echo 'Adding Env Variables'
-     echo 'export PORT=3000' >> ~/.bashrc
-     echo 'export API_VERSION=1.0.0' >> ~/.bashrc
-     echo 'export API_AUTHOR=Taller2 Team APGB' >> ~/.bashrc
-     echo 'export API_RELEASE_DATE=November 2017' >> ~/.bashrc
-     echo 'export TOKENS_SECRET=EF3foe408HH4ul94cHMLnWwu6SObwqT5UIjyWqZYnzoIjRxb7BDa7XYbHw' >> ~/.bashrc
-     echo 'export API_RELEASE_DATE=November 2017' >> ~/.bashrc
-     echo 'export POSTGRES_PASSWORD=3x4mpl3' >> ~/.bashrc
-     echo 'export DATABASE_URL=postgres://postgres:3x4mpl3@localhost:5432/postgres' >> ~/.bashrc
-     
+     echo 'export ENV=DEVELOPMENT' >> ~/.profile
+     echo 'export PORT=3000' >> ~/.profile
+     echo 'export API_VERSION=1.0.0' >> ~/.profile
+     echo 'export API_AUTHOR=Taller2 Team APGB' >> ~/.profile
+     echo 'export API_RELEASE_DATE=November 2017' >> ~/.profile
+     echo 'export TOKENS_SECRET=EF3foe408HH4ul94cHMLnWwu6SObwqT5UIjyWqZYnzoIjRxb7BDa7XYbHw' >> ~/.profile
+     echo 'export POSTGRES_PASSWORD=postgres' >> ~/.profile
+     echo 'export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres' >> ~/.profile
+     echo 'DONE'
+
      echo 'Adding repos'
      sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
      wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
      sudo apt-get update
+     echo 'DONE'
      
      echo 'Installing build-essential'
      sudo apt-get install -y build-essential
+     echo 'DONE'
 
      echo 'Installing PostgreSQL 9.6'
      sudo apt-get install -y postgresql-9.6
+     echo 'DONE'
 
      echo 'Installing Node 6.x'
      curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
      sudo apt-get install -y nodejs
+     echo 'DONE'
 
      echo 'Installing node global packages'
      npm install -g nodemon@1.12.1
      npm install -g @angular/cli@1.3.1
+     echo 'DONE'
+     echo 'FINISH'
   SHELL
   #config.vm.provision :shell, path: 'scripts/bootstrap.sh'
 end

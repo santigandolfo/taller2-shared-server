@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { BusinessUser} from '../../../../entities/business-user.entity';
 import { BusinessUsersService } from '../../../../services/business-users.service';
-import { Router } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { NotificationBarService, NotificationType } from 'angular2-notification-bar';
 @Component({
   selector: 'business-user-show',
   templateUrl: './business-users.show.component.html',
@@ -11,25 +11,48 @@ import { Router } from '@angular/router';
 export class BusinessUsersShowComponent implements OnInit {
 
   id: number;
-  user: BusinessUser | null;
-  error = '';
-  constructor(private router: Router, private usersService: BusinessUsersService) {}
-
-  ngOnInit() {
-    this.id = 1;
-    this.usersService.getById(this.id).then(user => {
-      this.user = user;
+  buser: BusinessUser | null;
+  authUser: BusinessUser | null;
+  numberOfAllowedPermissions: number;
+  permissions: string[];
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private businessUsersService: BusinessUsersService,
+    private notificationBarService: NotificationBarService
+  ) {
+    businessUsersService.isLoggedIn().then(user => {
+      this.authUser = user;
+    }).catch(() => {
+      this.router.navigate(['/']);
     });
   }
 
-  delete() {
-    this.usersService.delete(this.id).then(res => {
-      if (res.success) {
-        console.log('deleted');
-        this.router.navigate(['/business-users']);
-      }else {
-        console.log(JSON.stringify(res.json));
-      }
+  ngOnInit() {
+    this.route.params
+    .subscribe(params => {
+      this.id = params['id'];
+      this.businessUsersService.getById(this.id).then(buser => {
+        this.buser = buser;
+        this.numberOfAllowedPermissions = this.allowedPermissions().length;
+        this.permissions = this.allowedPermissions();
+      }).catch(err => {
+        this.notificationBarService.create({
+          message: 'Business User error: ' + err.error,
+          type: NotificationType.Error,
+          hideDelay: 3000,
+        });
+      });
     });
+  }
+
+  allowedPermissions() {
+    const permissions = [];
+    for (const key of Object.keys(this.buser.role)){
+      if (key !== 'id' && key !== 'name' && this.buser.role[key] !== false) {
+        permissions.push(key);
+      }
+    }
+    return permissions;
   }
 }

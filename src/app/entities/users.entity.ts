@@ -2,7 +2,7 @@ import { Car } from './car.entity';
 export interface User {
   id?: number;
   username: string;
-  password: string;
+  password?: string;
   type: string;
   firstname: string;
   lastname: string;

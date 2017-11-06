@@ -16,10 +16,11 @@
               <td>@{{buser.username}}</td>
               <td>{{buser.name}}</td>
               <td>{{buser.surname}}</td>
-              <td>{{buser.role?.name}}</td>
+              <td>{{(buser.role !== null) ? buser.role.name : "-"}}</td>
               <td>
-                <i (click)="edit(buser)" class="material-icons action">mode_edit</i>
-                <i (click)="deletionAttempt(buser)" *ngIf="deletable(buser)" class="material-icons action">delete</i>
+                <i (click)="show(buser)" class="material-icons action" title="Details">format_list_bulleted</i>
+                <i (click)="edit(buser)" class="material-icons action" title="Edit">mode_edit</i>
+                <i (click)="deletionAttempt(buser)" *ngIf="deletable(buser)" class="material-icons action" title="Delete">delete</i>
               </td>
             </tr>
           </tbody>

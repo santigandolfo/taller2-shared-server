@@ -1,3 +1,48 @@
-<h2>
-  Create Business User
-</h2>
+<side-bar [user]="authUser"></side-bar>
+<div class="row">
+  <div class="col offset-l3 l9">
+    <h2>Create a Business User</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col offset-l3 l9">
+      <div class="row">
+          <form #theForm="ngForm" (ngSubmit)="creationAttempt(theForm)" class="col s12 edit-form">
+            
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="buser.username" placeholder="Username" id="username" name="username" type="text" class="validate">
+                <label for="username">Username</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="buser.password" placeholder="Password" id="password" name="password" type="password" class="validate">
+                <label for="surname">Password</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="buser.name" placeholder="Name" id="name" name="name" type="text" class="validate">
+                <label for="name">Name</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="buser.surname" placeholder="Surname" id="surname" name="surname" type="text" class="validate">
+                <label for="surname">Surname</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s1">
+                <button class="btn waves-effect waves-light" type="submit" name="create">CREATE</button>
+              </div>
+            </div>
+          </form>
+        </div>
+  </div>
+</div>

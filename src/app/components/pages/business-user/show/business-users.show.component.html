@@ -1,3 +1,41 @@
-<h2>
-  Show Business User
-</h2>
+<side-bar [user]="authUser"></side-bar>
+<div class="row">
+  <div class="col offset-l3 l9">
+    <div class="card profile-page-header">
+        <div class="card-image waves-block waves-light">
+            <img class="activator" src="assets/img/buser_show_background.jpg" alt="user background">                    
+        </div>
+        <figure class="card-profile-image">
+            <img src="http://placehold.it/128x128" alt="profile image" class="circle z-depth-2 responsive-img activator">
+        </figure>
+        <div class="card-content">
+          <div class="row">                    
+            <div class="col s3 offset-s2">                        
+                <h4 class="card-title grey-text text-darken-4">{{ buser.name }} {{ buser.surname }}</h4>
+                <p class="medium-small grey-text">Business User</p>                        
+            </div>
+            <div class="col s2 center-align">
+                <h4 class="card-title grey-text text-darken-4">{{ buser.username }}</h4>
+                <p class="medium-small grey-text">Username</p>                        
+            </div>
+            <div class="col s2 center-align">
+                <h4 class="card-title grey-text text-darken-4">{{ numberOfAllowedPermissions }}</h4>
+                <p class="medium-small grey-text">Allowed Permissions</p>                        
+            </div>                    
+            <div class="col s2 center-align">
+                <h4 class="card-title grey-text text-darken-4">{{(buser.role !== null) ? buser.role.name : "-"}}</h4>
+                <p class="medium-small grey-text">Role</p>                        
+            </div>                    
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col offset-l3 l9 left-align">
+        <h5>Permission to:</h5>
+        <div *ngFor="let p of permissions" class="chip">
+            {{ p }}
+        </div>
+    </div>
+</div>
