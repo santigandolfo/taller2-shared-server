@@ -45,11 +45,11 @@ export class BusinessUsersListComponent implements OnInit {
   }
 
   edit(buser: BusinessUser) {
-    this.router.navigate(['/business-users/edit', buser.id]);
+    this.router.navigate(['business-users/edit', buser.id]);
   }
 
   show(buser: BusinessUser) {
-    this.router.navigate(['/business-users/show', buser.id]);
+    this.router.navigate(['business-users/show', buser.id]);
   }
 
   deletionAttempt(user) {

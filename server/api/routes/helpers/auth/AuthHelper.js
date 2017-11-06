@@ -44,7 +44,7 @@ module.exports = class AuthVerifier {
   }
 
   static searchUserWith(decoded,res,resolve,reject){
-    Logger.log("Token decoded.",Logger.INFO());
+    Logger.log("Token decoded.", Logger.INFO());
     controller.getByCreds(decoded.creds).then(authUser => {
       Logger.log("Business User found: " + JSON.stringify(authUser),Logger.INFO());
       if(authUser != null){
@@ -56,7 +56,7 @@ module.exports = class AuthVerifier {
         });
       }
     }).catch(fail => {
-      Logger.log("Business Users could not be retrieved from token: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+      Logger.log("Business Users could not be retrieved from token",Logger.ERROR(''));
       res.status(500).json({
         errors: [ {
             error: fail.toString()

@@ -10,7 +10,6 @@ import { NotificationBarService, NotificationType } from 'angular2-notification-
 })
 export class BusinessUsersShowComponent implements OnInit {
 
-  id: number;
   buser: BusinessUser | null;
   authUser: BusinessUser | null;
   numberOfAllowedPermissions: number;
@@ -31,8 +30,7 @@ export class BusinessUsersShowComponent implements OnInit {
   ngOnInit() {
     this.route.params
     .subscribe(params => {
-      this.id = params['id'];
-      this.businessUsersService.getById(this.id).then(buser => {
+      this.businessUsersService.getById(params['id']).then(buser => {
         this.buser = buser;
         this.numberOfAllowedPermissions = this.allowedPermissions().length;
         this.permissions = this.allowedPermissions();
@@ -54,5 +52,10 @@ export class BusinessUsersShowComponent implements OnInit {
       }
     }
     return permissions;
+  }
+
+  goToEdit() {
+    console.log('click');
+    this.router.navigate(['business-users/edit', this.buser.id]);
   }
 }

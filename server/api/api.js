@@ -4,12 +4,14 @@ const router = express.Router();
 const businessRoutes = require('./routes/BusinessUserRoutes');
 const userRoutes = require('./routes/UserRoutes');
 const AuthRoutes = require('./routes/AuthRoutes');
+const Logger = require('../log/Logger');
 
 const apiVersion = process.env.API_VERSION;
 const apiAuthor = process.env.API_AUTHOR;
 const apiReleaseDate = process.env.API_RELEASE_DATE;
 
 router.use((req,res,next) => {
+  Logger.log("Request sent from: " + req.headers['user-agent'],Logger.INFO());
   res.header('api-version',apiVersion);
   next();
 });
