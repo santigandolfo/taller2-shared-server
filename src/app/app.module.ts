@@ -7,16 +7,22 @@ import { RouterModule } from '@angular/router';
 import { NotificationBarModule } from 'angular2-notification-bar';
 // Components
 import { AppComponent } from './app.component';
+
+import { UsersListComponent } from './components/pages/user/list/users.list.component';
+import { UsersShowComponent } from './components/pages/user/show/users.show.component';
+
 import { BusinessUsersListComponent } from './components/pages/business-user/list/business-users.list.component';
 import { BusinessUsersShowComponent } from './components/pages/business-user/show/business-users.show.component';
 import { BusinessUsersEditComponent } from './components/pages/business-user/edit/business-users.edit.component';
 import { BusinessUsersCreateComponent } from './components/pages/business-user/create/business-users.create.component';
+
 import { NotFoundComponent } from './components/pages/notfound/notfound.component';
 import { HomeComponent } from './components/pages/home/home.component';
 
 import { SideBarComponent } from './components/utils/sidebar.component';
 
 // Services
+import { UsersService } from './services/users.service';
 import { BusinessUsersService } from './services/business-users.service';
 
 // Routes
@@ -24,6 +30,14 @@ const routes: object[] = [
   {
     path: '',
     component: HomeComponent
+  },
+  {
+    path: 'users',
+    component: UsersListComponent
+  },
+  {
+    path: 'users/show/:id',
+    component: UsersShowComponent
   },
   {
     path: 'business-users',
@@ -47,6 +61,8 @@ const routes: object[] = [
 @NgModule({
   declarations: [
     AppComponent,
+    UsersListComponent,
+    UsersShowComponent,
     BusinessUsersListComponent,
     BusinessUsersShowComponent,
     BusinessUsersEditComponent,
@@ -62,7 +78,9 @@ const routes: object[] = [
     NotificationBarModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [BusinessUsersService],
+  providers: [
+    UsersService,
+    BusinessUsersService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,0 +1,17 @@
+.card-profile-image {
+  width: 110px;
+  position: absolute;
+  top: 190px;
+  z-index: 1;
+  left: 40px;
+  margin: 0;
+}
+
+.card-image {
+  height: 250px;
+  overflow: hidden;
+}
+
+.profile-page-header{
+  margin-right: 20px;
+}

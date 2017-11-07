@@ -1,0 +1,30 @@
+<side-bar [user]="authUser"></side-bar>
+<div class="row user-list">
+  <div class="col offset-l3 l9">
+      <table class="bordered centered">
+          <thead>
+            <tr>
+                <th>Username</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Type</th>
+                <th>Email</th>  
+                <th>Actions</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>@{{ user.username }}</td>
+              <td>{{ user.firstname }}</td>
+              <td>{{ user.lastname }}</td>
+              <td>{{ user.type }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <i (click)="show(user)" class="material-icons action" title="Details">format_list_bulleted</i>
+                <i (click)="deletionAttempt(user)" *ngIf="deletable(buser)" class="material-icons action" title="Delete">delete</i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+</div>
