@@ -4,30 +4,41 @@ const router = express.Router();
 const BusinessUserController = require('../../controllers/business-controller/BusinessUserController')
 const RoleController = require('../../controllers/business-controller/RoleController')
 
+const SchemaHelper = require('./helpers/schema/SchemaHelper')
 const AuthHelper = require('./helpers/auth/AuthHelper');
 const Logger = require('../../log/Logger')
 
 const buserController = new BusinessUserController();
 const roleController = new RoleController();
 
+const BusinessUserCreateSchemaMap = require('./helpers/schema/maps/BusinessUserCreateSchemaMap')
+
 router.post('/', (req, res) => {
   let user = req.body;
-  user.roleId = null;
-  buserController.create(user).then(retUser => {
-    Logger.log("Business User created: " + JSON.stringify({
-      id: retUser.id,
-      username: retUser.username
-    }),Logger.INFO());
-    res.status(201).json({
-      id: retUser.id,
-      token: AuthHelper.signToken(user)
+  SchemaHelper.check(user,BusinessUserCreateSchemaMap).then(() => {
+    user.roleId = null;
+    buserController.create(user).then(retUser => {
+      Logger.log("Business User created: " + JSON.stringify({
+        id: retUser.id,
+        username: retUser.username
+      }),Logger.INFO());
+      res.status(201).json({
+        id: retUser.id,
+        token: AuthHelper.signToken(user)
+      });
+    }).catch(fail => {
+      Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+      res.status(500).json({
+        errors: fail.errors.map(err => {
+          return { error: err.message }
+        })
+      });
     });
-  }).catch(fail => {
-    Logger.log("Business User could not be created: " + JSON.stringify(fail.errors),Logger.ERROR(''));
-    res.status(500).json({
-      errors: fail.errors.map(err => {error: err.message})
-    });
+  }).catch(error => {
+    Logger.log("Business User bad formed: " + JSON.stringify(error),Logger.WARNING());
+    res.status(400).json(error)
   });
+
 });
 
 router.get('/', (req, res) => {
@@ -39,7 +50,9 @@ router.get('/', (req, res) => {
       }).catch(fail => {
         Logger.log("Business Users could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map(err => {error: err.message})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {
@@ -92,7 +105,9 @@ router.get('/roles/:name',(req,res) => {
       }).catch(fail => {
         Logger.log("Role could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map(err => {error: err.message})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {
@@ -115,7 +130,9 @@ router.post('/roles',(req,res) => {
       }).catch(fail => {
         Logger.log("Role could not be created: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map(err => {error: err.message})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {
@@ -148,7 +165,9 @@ router.put('/:userId/role/:roleId',(req,res) => {
           }).catch(fail => {
             Logger.log("Business User with id " + userId + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
             res.status(500).json({
-              errors: fail.errors.map((err) => {return {error: err.message}})
+              errors: fail.errors.map(err => {
+                return { error: err.message }
+              })
             });
           });
         }else{
@@ -160,7 +179,9 @@ router.put('/:userId/role/:roleId',(req,res) => {
       }).catch(fail => {
         Logger.log("Role with id " + roleId + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map((err) => {return {error: err.message}})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {
@@ -216,7 +237,9 @@ router.put('/:id', (req, res) => {
       }).catch(fail => {
         Logger.log("Business User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map((err) => {return {error: err.message}})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {
@@ -239,7 +262,9 @@ router.delete('/:id', (req, res) => {
       }).catch(fail => {
         Logger.log("Business User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR());
         res.status(500).json({
-          errors: fail.errors.map((err) => {return {error: err.message}})
+          errors: fail.errors.map(err => {
+            return { error: err.message }
+          })
         });
       });
     }).catch(error => {

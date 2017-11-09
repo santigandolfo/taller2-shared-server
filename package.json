@@ -40,6 +40,7 @@
     "coveralls": "^2.13.1",
     "enhanced-resolve": "^3.3.0",
     "express": "^4.15.4",
+    "joi": "^13.0.1",
     "js-sha256": "^0.6.0",
     "jsonwebtoken": "^8.0.1",
     "morgan": "^1.9.0",

@@ -39,6 +39,10 @@ module.exports = class DBInitializer {
     return Role.count({where: {name: 'app'}})
   }
 
+  managerRoleCount(){
+    return Role.count({where: {name: 'manager'}})
+  }
+
   adminCount(){
     return BusinessUser.count({where: {username: 'admin'}})
   }
@@ -76,6 +80,14 @@ module.exports = class DBInitializer {
     });
   }
 
+  createDefaultManagerRole(){
+    return Role.create({
+      name: 'manager',
+      deletable: true,
+      delete_users: true
+    });
+  }
+
   createAdminWith(aRole){
     BusinessUser.create({
       username: 'admin',
@@ -95,6 +107,18 @@ module.exports = class DBInitializer {
       surname: 'Server'
     }).then(user => {
       user.setRole(aRole);
+    });
+  }
+
+  initManagerRole(){
+    this.managerRoleCount().then(managerRoleCount => {
+      if(managerRoleCount == 0){
+        this.createDefaultManagerRole().then(role => {
+          Logger.log('Manager role created', Logger.INFO());
+        });
+      }else{
+        Logger.log('Manager role already exists', Logger.INFO());
+      }
     });
   }
 
@@ -142,6 +166,7 @@ module.exports = class DBInitializer {
       this.initTables().then(() => {
         this.initAdmin();
         this.initApp();
+        this.initManagerRole();
       });
     },(err) => {
       Logger.log('Unable to connect to the database', Logger.ERROR(err));

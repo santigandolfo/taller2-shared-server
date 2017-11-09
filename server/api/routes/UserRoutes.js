@@ -76,7 +76,7 @@ router.get('/:id', (req, res) => {
           });
         }
       }).catch(fail => {
-        Logger.log("User with id " + id + "could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        Logger.log("User with id " + id + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
         res.status(500).json({
           errors: fail.errors.map((err) => {return {error: err.message}})
         });
@@ -97,7 +97,7 @@ router.put('/:id', (req, res) => {
         }),Logger.INFO());
         res.status(200).send();
       }).catch(fail => {
-        Logger.log("User with id " + id + "could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        Logger.log("User with id " + id + " could not be updated: " + JSON.stringify(fail.errors),Logger.ERROR(''));
         res.status(500).json({
           errors: fail.errors.map((err) => {return {error: err.message}})
         });
@@ -116,13 +116,40 @@ router.delete('/:id', (req, res) => {
         }),Logger.INFO());
         res.status(200).send();
       }).catch(fail => {
-        Logger.log("User with id " + id + "could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        Logger.log("User with id " + id + " could not be deleted: " + JSON.stringify(fail.errors),Logger.ERROR(''));
         res.status(500).json({
           errors: fail.errors.map((err) => {return {error: err.message}})
         });
       });
     }).catch(error => res.status(401).json(error));
   }).catch(error => res.status(401).json(error));      
+});
+
+router.post('/users/:id/cars', (req, res) => {
+  const id = req.params.id;
+  const car = req.body;
+  AuthHelper.verifyToken(req, res).then(authUser => {
+    AuthHelper.isAllowedTo(authUser,'create_users').then(() => { 
+      controller.getById(id).then(retUser => {
+        if(retUser != null){
+          Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
+          retUser.addCar(car)
+          Logger.log("Car assigned: " + JSON.stringify(car),Logger.INFO());
+          res.status(200).json(retUser);
+        }else{
+          Logger.log("User with id " + id + " not found.",Logger.WARNING());
+          res.status(404).json({
+            error: "User with id " + id + " not found."
+          });
+        }
+      }).catch(fail => {
+        Logger.log("User with id " + id + " could not be assign to car: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        res.status(500).json({
+          errors: fail.errors.map((err) => {return {error: err.message}})
+        });
+      });
+    }).catch(error => res.status(401).json(error));
+  }).catch(error => res.status(401).json(error));    
 });
 
 module.exports = router;
