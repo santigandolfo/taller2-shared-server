@@ -21,7 +21,7 @@
               <td>{{ user.email }}</td>
               <td>
                 <i (click)="show(user)" class="material-icons action" title="Details">format_list_bulleted</i>
-                <i (click)="deletionAttempt(user)" *ngIf="deletable(buser)" class="material-icons action" title="Delete">delete</i>
+                <i (click)="deletionAttempt(user)" *ngIf="deletable(user)" class="material-icons action red-text" title="Delete">delete</i>
               </td>
             </tr>
           </tbody>

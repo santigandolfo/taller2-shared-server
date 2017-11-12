@@ -40,6 +40,5 @@ const User = sequelize.define('user', {
   }
 });
 
-User.belongsToMany(Car, { through: 'BusinessUser_Car', onDelete: 'cascade' });
-
+User.hasMany(Car, { onDelete: 'cascade' });
 module.exports = User;

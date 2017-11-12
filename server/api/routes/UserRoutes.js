@@ -125,7 +125,7 @@ router.delete('/:id', (req, res) => {
   }).catch(error => res.status(401).json(error));      
 });
 
-router.post('/users/:id/cars', (req, res) => {
+router.post('/:id/cars', (req, res) => {
   const id = req.params.id;
   const car = req.body;
   AuthHelper.verifyToken(req, res).then(authUser => {
@@ -133,9 +133,9 @@ router.post('/users/:id/cars', (req, res) => {
       controller.getById(id).then(retUser => {
         if(retUser != null){
           Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
-          retUser.addCar(car)
+          retUser.createCar(car)
           Logger.log("Car assigned: " + JSON.stringify(car),Logger.INFO());
-          res.status(200).json(retUser);
+          res.status(200).send();
         }else{
           Logger.log("User with id " + id + " not found.",Logger.WARNING());
           res.status(404).json({
@@ -145,7 +145,31 @@ router.post('/users/:id/cars', (req, res) => {
       }).catch(fail => {
         Logger.log("User with id " + id + " could not be assign to car: " + JSON.stringify(fail.errors),Logger.ERROR(''));
         res.status(500).json({
-          errors: fail.errors.map((err) => {return {error: err.message}})
+          errors: [{
+           error: fail.toString()
+          }]
+        });
+      });
+    }).catch(error => res.status(401).json(error));
+  }).catch(error => res.status(401).json(error));    
+});
+
+router.delete('/:id/cars/:carId', (req, res) => {
+  const userId = req.params.id;
+  const cardId = req.params.carId;
+  AuthHelper.verifyToken(req, res).then(authUser => {
+    AuthHelper.isAllowedTo(authUser,'delete_users').then(() => { 
+      controller.deleteCar(cardId,userId).then(ret => {
+        Logger.log("Car deleted: " + JSON.stringify({
+          id: cardId
+        }),Logger.INFO());
+        res.status(200).send();
+      }).catch(fail => {
+        Logger.log("User with id " + id + " could not be deleted car: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        res.status(500).json({
+          errors: [{
+           error: fail.toString()
+          }]
         });
       });
     }).catch(error => res.status(401).json(error));

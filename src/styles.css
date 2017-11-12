@@ -2,3 +2,7 @@
 .nomargin {
   margin: 0px 0px 0px 0px !important;
 }
+
+.action { 
+  cursor: pointer; 
+}

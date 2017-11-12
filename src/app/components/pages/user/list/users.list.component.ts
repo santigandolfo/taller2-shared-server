@@ -34,7 +34,11 @@ export class UsersListComponent implements OnInit {
     });
   }
 
-  deletable(buser) {
+  editable(user) {
+    return this.authUser.role != null && this.authUser.role.edit_users;
+  }
+
+  deletable(user) {
     return this.authUser.role != null && this.authUser.role.delete_users;
   }
 

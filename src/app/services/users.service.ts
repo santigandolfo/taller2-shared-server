@@ -43,4 +43,12 @@ export class UsersService {
       return res;
     }).toPromise();
   }
+
+  deleteCar(CarId, UserId): Promise<any> {
+    const theHeaders = this.authHeader();
+    const options = new RequestOptions({ headers: theHeaders});
+    return this.http.delete('api/users/' + UserId + '/cars/' + CarId, options).map(res => {
+      return res;
+    }).toPromise();
+  }
 }

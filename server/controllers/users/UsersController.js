@@ -1,8 +1,22 @@
 const User = require('../../models/user/User');
+const Car = require('../../models/user/Car');
 const sha256 = require('js-sha256').sha256;
 module.exports = class UserController {
 
   constructor(){}
+
+  carsEagerly(){
+    return { 
+      model: Car, 
+      attributes: {
+        exclude: [
+          'updatedAt',
+          'createdAt'
+        ]
+      },
+      as: 'cars'
+    }
+  }
 
   all(aOffset,aLimit){
     aOffset = typeof aOffset !== 'undefined' ? aOffset : 0;
@@ -34,6 +48,15 @@ module.exports = class UserController {
     return User.destroy({where:{ id: anId }});
   }
 
+  deleteCar(aCarId,aUserId){
+    return Car.destroy({
+      where: {
+        id: aCarId,
+        userId: aUserId
+      }
+    })
+  }
+
   update(user,anId){
     if(user.hasOwnProperty('password'))
       user.password = sha256(user.password);
@@ -58,6 +81,7 @@ module.exports = class UserController {
   getById(anId){
     return User.findOne({
       where: {id: anId},
+      include: [this.carsEagerly()],
       attributes: {
         exclude: [
           'password',

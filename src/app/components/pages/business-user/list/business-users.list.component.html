@@ -19,8 +19,8 @@
               <td>{{(buser.role !== null) ? buser.role.name : "-"}}</td>
               <td>
                 <i (click)="show(buser)" class="material-icons action" title="Details">format_list_bulleted</i>
-                <i (click)="edit(buser)" class="material-icons action" title="Edit">mode_edit</i>
-                <i (click)="deletionAttempt(buser)" *ngIf="deletable(buser)" class="material-icons action" title="Delete">delete</i>
+                <i (click)="edit(buser)" *ngIf="editable(buser)" class="material-icons action" title="Edit">mode_edit</i>
+                <i (click)="deletionAttempt(buser)" *ngIf="deletable(buser)" class="material-icons action red-text" title="Delete">delete</i>
               </td>
             </tr>
           </tbody>

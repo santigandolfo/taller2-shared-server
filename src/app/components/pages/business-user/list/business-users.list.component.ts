@@ -44,6 +44,14 @@ export class BusinessUsersListComponent implements OnInit {
     }
   }
 
+  editable(buser) {
+    if (buser.role != null) {
+      return this.authUser.role != null && this.authUser.role.edit_bs_users;
+    }else {
+      return true;
+    }
+  }
+
   edit(buser: BusinessUser) {
     this.router.navigate(['business-users/edit', buser.id]);
   }

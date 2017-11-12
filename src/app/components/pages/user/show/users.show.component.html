@@ -19,7 +19,7 @@
                 <p class="medium-small grey-text">Username</p>                        
             </div>
             <div class="col s2 center-align">
-                <h4 class="card-title grey-text text-darken-4">{{ 0 }}</h4>
+                <h4 class="card-title grey-text text-darken-4">{{ user.cars.length }}</h4>
                 <p class="medium-small grey-text">Number of cars</p>                        
             </div>                    
             <div class="col s2 center-align">
@@ -29,5 +29,18 @@
           </div>
         </div>
     </div>
+    <ul class="collection with-header">
+        <li class="left-align collection-header"><h4>Cars</h4></li>
+        <li *ngFor="let car of user.cars" class="collection-item avatar">
+            <img src="assets/img/taxi-icon.png" class="circle">
+            <p class="left-align">
+                Brand: {{ car.brand }} <br>
+                Model: {{ car.model }} <br>
+                Color: {{ car.color }} <br>
+                Year: {{ car.year }} <br>
+            </p>
+            <i (click)="carDeletionAttempt(car)" *ngIf="deletableCar()" class="secondary-content material-icons action red-text">delete</i>
+        </li>
+    </ul>
   </div>
 </div>

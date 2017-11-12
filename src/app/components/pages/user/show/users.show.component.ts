@@ -28,6 +28,35 @@ export class UsersShowComponent implements OnInit {
     });
   }
 
+  deletableCar() {
+    return this.authUser.role != null && this.authUser.role.delete_users;
+  }
+
+  carDeletionAttempt(car) {
+    if (confirm('Are you sure you want to delete ' + car.brand + '?')) {
+      this.deleteCar(car.id);
+    }
+  }
+
+  deleteCar(id) {
+    this.usersService.deleteCar(id, this.user.id).then(res => {
+      this.notificationBarService.create({
+        message: 'Deletion succeed',
+        type: NotificationType.Success,
+        hideDelay: 3000,
+      });
+      this.user.cars = this.user.cars.filter(car => {
+        return car.id !== id;
+      });
+    }).catch(err => {
+      this.notificationBarService.create({
+        message: 'Deletion failed: ' + err,
+        type: NotificationType.Error,
+        hideDelay: 3000,
+      });
+    });
+  }
+
   ngOnInit() {
     this.route.params
     .subscribe(params => {
