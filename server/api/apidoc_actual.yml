@@ -196,6 +196,76 @@ paths:
           schema:
             $ref: "#/definitions/Errors" 
             
+  /users/{userId}/cars:
+    parameters:
+      - description: "user's identifier"
+        in: path
+        name: userId
+        required: true
+        type: integer
+    post:
+      summary: FiUber user validation
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Validates a FiUber user.
+      parameters:
+        - description: "Car fields"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/CarCreate"
+      responses:
+        '200':
+          description: Car Created
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"               
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors"
+            
+  /users/{userId}/cars/{carId}:
+    parameters:
+      - description: "user's identifier"
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: "car's identifier"
+        in: path
+        name: carId
+        required: true
+        type: integer
+    delete:
+      summary: FiUber car deletion
+      tags:
+        - app manager
+      security:
+        - AuthToken: []
+      description: |
+        Deletes registrated car from {userId} with {carId}.
+      responses:
+        '200':
+          description: Car deleted
+        '404':
+          description: Car not found
+          schema:
+            $ref: "#/definitions/Error"
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error"    
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+  
   /users/validate:
     post:
       summary: FiUber user validation
@@ -589,6 +659,46 @@ definitions:
       - email
       - type
       
+  CarCreate:
+    properties:
+      brand:
+        type: string
+        description: |
+          Car's brand.
+      model:
+        type: string
+        description: |
+          Car's model.
+      color:
+        type: string
+        description: |
+          Car's color. 
+      year:
+        type: number
+        description: |
+          Car's year.   
+  
+  Car:
+    properties:
+      id: 
+        $ref: '#/definitions/Id'
+      brand:
+        type: string
+        description: |
+          Car's brand.
+      model:
+        type: string
+        description: |
+          Car's model.
+      color:
+        type: string
+        description: |
+          Car's color. 
+      year:
+        type: number
+        description: |
+          Car's year.  
+      
   Credential:
     properties:
       username:
@@ -644,7 +754,12 @@ definitions:
         type: string
         format: base64
         description: |
-          User's image in base64.      
+          User's image in base64.    
+      cars:
+        type: array
+        items:
+          $ref: '#/definitions/Car'
+          
           
   BusinessUser:
     properties:
