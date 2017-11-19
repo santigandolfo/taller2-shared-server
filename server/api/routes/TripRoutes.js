@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const Logger = require('../../log/Logger')
 const SchemaHelper = require('./helpers/schema/SchemaHelper')
 const AuthHelper = require('./helpers/auth/AuthHelper');
 
