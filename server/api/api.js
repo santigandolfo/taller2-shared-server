@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const businessRoutes = require('./routes/BusinessUserRoutes');
-const userRoutes = require('./routes/UserRoutes');
+const BusinessRoutes = require('./routes/BusinessUserRoutes');
+const UserRoutes = require('./routes/UserRoutes');
 const AuthRoutes = require('./routes/AuthRoutes');
+const TripRoutes = require('./routes/TripRoutes')
 const Logger = require('../log/Logger');
 
 const apiVersion = process.env.API_VERSION;
@@ -24,8 +25,10 @@ router.get('/', (req, res) => {
   })
 });
 
-router.use('/auth',AuthRoutes);
-router.use('/users',userRoutes);
-router.use('/business-users',businessRoutes);
+router.use('/auth', AuthRoutes);
+router.use('/users', UserRoutes);
+router.use('/business-users', BusinessRoutes);
+router.use('/trips', TripRoutes);
+
 
 module.exports = router;
