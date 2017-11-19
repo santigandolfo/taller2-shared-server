@@ -74,14 +74,7 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
      echo 'Adding Env Variables'
-     echo 'export ENV=DEVELOPMENT' >> ~/.profile
-     echo 'export PORT=3000' >> ~/.profile
-     echo 'export API_VERSION=1.0.0' >> ~/.profile
-     echo 'export API_AUTHOR=Taller2 Team APGB' >> ~/.profile
-     echo 'export API_RELEASE_DATE=November 2017' >> ~/.profile
-     echo 'export TOKENS_SECRET=EF3foe408HH4ul94cHMLnWwu6SObwqT5UIjyWqZYnzoIjRxb7BDa7XYbHw' >> ~/.profile
-     echo 'export POSTGRES_PASSWORD=postgres' >> ~/.profile
-     echo 'export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres' >> ~/.profile
+     source /vagrant/.env 
      echo 'DONE'
 
      echo 'Adding repos'
@@ -96,6 +89,7 @@ Vagrant.configure(2) do |config|
 
      echo 'Installing PostgreSQL 9.6'
      sudo apt-get install -y postgresql-9.6
+     sudo apt-get install -y postgresql-9.6-postgis-2.3
      echo 'DONE'
 
      echo 'Installing Node 6.x'

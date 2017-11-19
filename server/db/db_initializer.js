@@ -3,6 +3,7 @@ const User = require('../models/user/User');
 const Car = require('../models/user/Car');
 const BusinessUser = require('../models/business-user/BusinessUser');
 const Role = require('../models/business-user/Role');
+const Trip = require('../models/trip/Trip');
 const sha256 = require('js-sha256').sha256;
 const Logger = require('../log/Logger');
 
@@ -19,11 +20,13 @@ module.exports = class DBInitializer {
   initTables(){
     return new Promise(resolve => {
       let dropTable = this.environment == 'DEVELOPMENT';
-      Car.sync({ force: dropTable }).then(() => {
-        User.sync({ force: dropTable }).then(() => {
-          Role.sync({ force: dropTable }).then(() => {
-            BusinessUser.sync({ force: dropTable }).then(() =>{
-              resolve();
+      Trip.sync({ force: dropTable }).then(() => {
+        Car.sync({ force: dropTable }).then(() => {
+          User.sync({ force: dropTable }).then(() => {
+            Role.sync({ force: dropTable }).then(() => {
+              BusinessUser.sync({ force: dropTable }).then(() =>{
+                resolve();
+              });
             });
           });
         });

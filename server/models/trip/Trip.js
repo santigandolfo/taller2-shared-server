@@ -4,13 +4,13 @@ const sequelize = new Sequelize();
 
 const Trip = sequelize.define('trip', {
   start_location: {
-    type: Sequelize.GEOMETRY('POINT'),
+    type: _Sequelize.GEOMETRY('POINT'),
     allowNull: false
-  }
+  },
   end_location: {
-    type: Sequelize.GEOMETRY('POINT'),
+    type: _Sequelize.GEOMETRY('POINT'),
     allowNull: false
-  }
+  },
   distance: {
     type: _Sequelize.DOUBLE,
     allowNull: false
@@ -35,6 +35,6 @@ const Trip = sequelize.define('trip', {
     type: _Sequelize.INTEGER,
     allowNull: false
   }
-}
+});
 
 module.exports = Trip;
