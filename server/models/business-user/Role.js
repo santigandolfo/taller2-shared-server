@@ -78,6 +78,11 @@ const Role = sequelize.define('role', {
     defaultValue: false,
     allowNull: false,
   },
+  create_trips: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },  
   view_settings: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,

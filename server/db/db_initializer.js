@@ -79,7 +79,8 @@ module.exports = class DBInitializer {
       view_bs_users: false,
       create_users: true,
       delete_users: true,
-      edit_users: true
+      edit_users: true,
+      create_trips: true
     });
   }
 
