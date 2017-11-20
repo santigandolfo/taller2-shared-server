@@ -452,6 +452,7 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
+            
   /business-users/{userId}/role/{roleId}:
     parameters:
       - name: userId
@@ -568,6 +569,37 @@ paths:
           description: Unauthorized
           schema:
               $ref: "#/definitions/Error"  
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
+  /trips:
+    post:
+      summary: FiUber trips registration
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Registers a trip.
+      parameters:
+        - description: "Trip"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/TripCreate" 
+      responses:
+        '200':
+          description: Returns registered trip id
+          schema:
+            properties:
+              id:
+                $ref: "#/definitions/Id" 
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error" 
         '500':
           description: Server error
           schema:
@@ -856,6 +888,46 @@ definitions:
     required:
       - name
 
+  TripCreate:
+    properties:
+      start_location:
+        type: array
+        items:
+          type:
+            number
+        description: |
+          Trip's start location [lat, lon]
+      end_location:
+        type: array
+        items:
+          type:
+            number
+        description: |
+          Trip's start location [lat, lon]
+      distance:
+        type: number
+        description: |
+          Trip's distance      
+      pay_method:
+        type: string
+        description: |
+          Trip's pay method. example -> 'credit'
+      currency:
+        type: string
+        description: |
+          Trip's payment currency. example -> '$' 
+      cost:
+        type: number
+        description: |
+          Trip's cost.     
+      driver_id:
+        type: number
+        description: |
+          Trip's driver. 
+      passenger_id:
+        type: number
+        description: |
+          Trip's passenger. 
         
   Role:
     properties:
