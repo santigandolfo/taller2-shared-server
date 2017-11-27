@@ -133,9 +133,12 @@ router.post('/:id/cars', (req, res) => {
       controller.getById(id).then(retUser => {
         if(retUser != null){
           Logger.log("User retrieved: " + JSON.stringify(retUser),Logger.INFO());
-          retUser.createCar(car)
-          Logger.log("Car assigned: " + JSON.stringify(car),Logger.INFO());
-          res.status(200).send();
+          retUser.createCar(car).then(retCar => {
+            Logger.log("Car assigned: " + JSON.stringify(car),Logger.INFO());
+            res.status(200).json({
+              id: retCar.id
+            });
+          })
         }else{
           Logger.log("User with id " + id + " not found.",Logger.WARNING());
           res.status(404).json({
