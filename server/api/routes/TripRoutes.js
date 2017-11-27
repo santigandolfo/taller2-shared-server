@@ -38,7 +38,12 @@ router.post('/', (req, res) => {
   });
 });
 
-
+router.post('/estimate', (req, res) => {
+  const trip = req.body;
+  tripController.estimate(trip).then(result => {
+    res.status(200).json(result);
+  })
+});
 
 
 module.exports = router;
