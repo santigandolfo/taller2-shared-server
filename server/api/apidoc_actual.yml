@@ -604,6 +604,39 @@ paths:
           description: Server error
           schema:
             $ref: "#/definitions/Errors" 
+  /trips/estimate:
+    post:
+      summary: FiUber trips estimation
+      tags:
+        - app
+      security:
+        - AuthToken: []
+      description: |
+        Estimates a trip.
+      parameters:
+        - description: "Trip"
+          in: body
+          name: ''
+          required: true
+          schema:
+            $ref: "#/definitions/TripEstimation" 
+      responses:
+        '200':
+          description: Returns registered trip id
+          schema:
+            properties:
+              currency:
+                type: string
+              value:
+                type: number
+        '401':
+          description: Unauthorized
+          schema:
+              $ref: "#/definitions/Error" 
+        '500':
+          description: Server error
+          schema:
+            $ref: "#/definitions/Errors" 
       
 definitions:
   ApiInfo:
@@ -920,6 +953,39 @@ definitions:
         type: number
         description: |
           Trip's cost.     
+      driver_id:
+        type: number
+        description: |
+          Trip's driver. 
+      passenger_id:
+        type: number
+        description: |
+          Trip's passenger.
+  
+  TripEstimation:
+    properties:
+      start_location:
+        type: array
+        items:
+          type:
+            number
+        description: |
+          Trip's start location [lat, lon]
+      end_location:
+        type: array
+        items:
+          type:
+            number
+        description: |
+          Trip's start location [lat, lon]
+      distance:
+        type: number
+        description: |
+          Trip's distance      
+      pay_method:
+        type: string
+        description: |
+          Trip's pay method. example -> 'credit'
       driver_id:
         type: number
         description: |
