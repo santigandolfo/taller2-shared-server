@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const UsersController = require('../../controllers/users/UsersController');
+const TripsController = require('../../controllers/trips/TripsController')
 const AuthHelper = require('../routes/helpers/auth/AuthHelper');
 const Logger = require('../../log/Logger');
 const controller = new UsersController();
+const tripsController = new TripsController();
 
 router.post('/', (req, res) => {
   let user = req.body;
@@ -123,6 +125,30 @@ router.delete('/:id', (req, res) => {
       });
     }).catch(error => res.status(401).json(error));
   }).catch(error => res.status(401).json(error));      
+});
+
+router.get('/:id/trips', (req, res) => {
+  const id = req.params.id;
+  AuthHelper.verifyToken(req, res).then(authUser => {
+    AuthHelper.isAllowedTo(authUser,'create_trips').then(() => {
+      tripsController.getByUserId(id).then(retTrips => {
+        Logger.log("Trips retrieved for user with id " + id + ": " + JSON.stringify(retTrips),Logger.INFO());
+        res.status(200).json(retTrips);
+      }).catch(fail => {
+        Logger.log("Trips for user with id " + id + " could not be retrieved: " + JSON.stringify(fail.errors),Logger.ERROR(''));
+        res.status(500).json({
+          errors: fail.errors.map((err) => {return {error: err.message}})
+        });
+      }); 
+    }).catch(error => {
+      Logger.log("User unauthorized: " + error.toString(),Logger.WARNING());
+      Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
+      res.status(401).json(error)
+    });
+  }).catch(error => {
+    Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
+    res.status(401).json(error)
+  });
 });
 
 router.post('/:id/cars', (req, res) => {

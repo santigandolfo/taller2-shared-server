@@ -1,5 +1,8 @@
 const Trip = require('../../models/trip/Trip');
 const RuleEngine = require('node-rules');
+const _Sequelize = require('sequelize')
+const Op = _Sequelize.Op;
+
 module.exports = class TripsController {
 
   constructor(){
@@ -24,6 +27,27 @@ module.exports = class TripsController {
     modTrip.start_location = start_location;
     modTrip.end_location = end_location;
     return Trip.create(modTrip);
+  }
+
+  getByUserId(anId){
+    return new Promise((resolve,reject) => {
+      Trip.findAll({
+        where: {
+          [Op.or]: [
+            {driver_id: anId}, 
+            {passenger_id: anId}
+          ]
+        },
+      }).then(retTrips => {
+        resolve(retTrips.map(trip => {
+          trip.start_location = trip.start_location.coordinates;
+          trip.end_location = trip.end_location.coordinates;
+          return trip;
+        }))
+      }).catch(err => {
+        reject(err)
+      })
+    })
   }
 
   estimate(trip){
