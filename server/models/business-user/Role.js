@@ -83,12 +83,32 @@ const Role = sequelize.define('role', {
     defaultValue: false,
     allowNull: false,
   },  
-  view_settings: {
+  view_rules: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  view_my_rules: {
     type: _Sequelize.BOOLEAN,
     defaultValue: true,
     allowNull: false,
   },
-  edit_settings: {
+  run_rules: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  },
+  create_rules: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  edit_rules: {
+    type: _Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+  delete_rules: {
     type: _Sequelize.BOOLEAN,
     defaultValue: false,
     allowNull: false,

@@ -4,6 +4,7 @@ const Car = require('../models/user/Car');
 const BusinessUser = require('../models/business-user/BusinessUser');
 const Role = require('../models/business-user/Role');
 const Trip = require('../models/trip/Trip');
+const Rule = require('../models/rule/Rule')
 const sha256 = require('js-sha256').sha256;
 const Logger = require('../log/Logger');
 
@@ -19,13 +20,15 @@ module.exports = class DBInitializer {
 
   initTables(){
     return new Promise(resolve => {
-      let dropTable = false;//this.environment == 'DEVELOPMENT';
-      Trip.sync({ force: dropTable }).then(() => {
-        Car.sync({ force: dropTable }).then(() => {
-          User.sync({ force: dropTable }).then(() => {
-            Role.sync({ force: dropTable }).then(() => {
-              BusinessUser.sync({ force: dropTable }).then(() =>{
-                resolve();
+      let dropTable = this.environment == 'DEVELOPMENT';
+      Rule.sync({ force: dropTable }).then(() => {
+        Trip.sync({ force: dropTable }).then(() => {
+          Car.sync({ force: dropTable }).then(() => {
+            User.sync({ force: dropTable }).then(() => {
+              Role.sync({ force: dropTable }).then(() => {
+                BusinessUser.sync({ force: dropTable }).then(() =>{
+                  resolve();
+                });
               });
             });
           });
@@ -67,7 +70,7 @@ module.exports = class DBInitializer {
       edit_bs_users: true,
       delete_bs_users: true,
       edit_users: true,
-      edit_settings: true
+      view_my_rules: false,
     });
   }
 
@@ -88,7 +91,12 @@ module.exports = class DBInitializer {
     return Role.create({
       name: 'manager',
       deletable: true,
-      delete_users: true
+      delete_users: true,
+      create_rules: true, 
+      edit_rules: true,
+      delete_rules: true,
+      view_rules: true,
+      view_my_rules: false
     });
   }
 
