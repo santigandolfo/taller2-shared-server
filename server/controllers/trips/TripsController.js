@@ -1,6 +1,7 @@
 const Trip = require('../../models/trip/Trip');
 const RuleEngine = require('node-rules');
-const _Sequelize = require('sequelize')
+const _Sequelize = require('sequelize');
+const moment = require('moment');
 const Op = _Sequelize.Op;
 
 module.exports = class TripsController {
@@ -50,17 +51,48 @@ module.exports = class TripsController {
     })
   }
 
+  populateTrip(trip){
+    // Data which is possible to be asked for when the estimation is happening
+    // - Trips in month, day, hour, half an hour, 10 mins and antiquity of driver
+    // - Trips in month, day, hour, half an hour, 10 mins, balance and antiquity of passenger
+    // - Distance, time of travel, start/end geoposition and start date/time 
+    // - Payment method
+    // - Application server in charge of trip
+    // - Waiting time to be picked up
+    var driver = User.findOne({where: { id: trip.driver_id}});
+    trip.driver = {};
+    trip.driver.tripsInMonth = 0;
+    trip.driver.tripsInDay = 0;
+    trip.driver.tripsInLastHour = 0;
+    trip.driver.tripsInLast30Mins = 0;
+    trip.driver.tripsInLast10Mins = 0;
+    trip.driver.antiquity = 0;
+    trip.driver.email = '';
+    var passenger = User.findOne({where: { id: trip.passenger_id}});
+    trip.passenger = {};
+    trip.passenger.tripsInMonth = 0;
+    trip.passenger.tripsInDay = 0;
+    trip.passenger.tripsInLast30Mins = 0;
+    trip.passenger.tripsInLast10Mins = 0;
+    trip.passenger.antiquity = 0;
+    trip.passenger.balance = 0;
+    trip.passenger.email = '';
+    trip.appServer = '';
+    trip.momentOfStart = moment();
+
+  }
+
   estimate(trip){
-    return new Promise((resolve,reject) => {
-      const cost = {
-        currency: "$",
-        value: 18.1 * trip.distance
-      }
-      resolve(cost)
-      // R.execute(cost,function(result){ 
-      //   resolve(result.cost)
-      // });
-    })
+
+    var rules = getRules();
+
+    var R = new RuleEngine([], {"ignoreFactChanges": true});
+
+    R.fromJSON(rules);
+    return R.execute(trip,function(result){ 
+      resolve(result.transactionTotal)
+      
+    });
   }
   
 }
