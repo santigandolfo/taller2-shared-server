@@ -213,7 +213,7 @@ module.exports = class DBInitializer {
       this.initTables().then(() => {
         this.initAdmin();
         this.initApp('appserver');
-        this.initRulesFor('appserver')
+        //this.initRulesFor('appserver')
         this.initManagerRole();
       });
     },(err) => {
