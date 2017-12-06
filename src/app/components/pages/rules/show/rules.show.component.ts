@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { RulesService } from '../../../../services/rules.service';
 import { BusinessUsersService } from '../../../../services/business-users.service';
 import { BusinessUser } from '../../../../entities/business-user.entity';
@@ -11,10 +11,10 @@ import { AceEditorComponent } from 'ng2-ace-editor/src/component';
   templateUrl: './rules.show.component.html',
   styleUrls: ['./rules.show.component.css']
 })
-export class RulesShowComponent implements OnInit {
+export class RulesShowComponent {
 
+  id: number = null;
   rule: Rule = {
-   id: null,
    name: null,
    definition: '',
    belongsTo: '',
@@ -35,16 +35,28 @@ export class RulesShowComponent implements OnInit {
     }).catch(() => {
       this.router.navigate(['/']);
     });
+    this.init();
   }
 
-  ngOnInit() {
+  init() {
     this.route.params
     .subscribe(params => {
-      this.rulesService.getById(params['id']).then(rule => {
+      this.id = params['id'];
+      this.rulesService.getById(this.id).then(rule => {
         console.log(rule);
         this.rule = rule;
       });
     });
+  }
+
+  save() {
+    if (this.rule != null) {
+      this.rulesService.update(this.rule, this.id).then(rule => {
+        this.rule = rule;
+      }).catch(err => {
+        console.log(err);
+      });
+    }
   }
 
 }
