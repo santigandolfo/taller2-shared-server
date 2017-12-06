@@ -74,6 +74,35 @@ module.exports = class DBInitializer {
     });
   }
 
+  createDefaultRuleFor(username) {
+    const def = [ { condition: 'function (R) {\n        \n        R.when(this && (this.saldo < 0));\n    }',
+    consequence: 'function (R) {\n        \n        \n        this.canTravel = false;\n        R.stop();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(true);\n    }',
+    consequence: 'function (R) {\n        \n        \n        this.transactionTotal = this.distance_in_km * 15;\n        R.next();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(this && this.momentOfStart\n         && this.momentOfStart.day() == 3\n         && this.momentOfStart.format(\'HHmmss\') >= \'160000\'\n         && this.momentOfStart.format(\'HHmmss\') <= \'170000\');\n    }',
+    consequence: 'function (R) {\n        \n        this.transactionTotal = this.transactionTotal * 0.95;\n        R.next();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(this && (this.trips == 0));\n    }',
+    consequence: 'function (R) {\n        \n        \n        this.transactionTotal -= 100;\n        R.next();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(this && this.momentOfStart.day() == 1\n        && this.momentOfStart.format(\'HHmmss\') >= \'170000\'\n        && this.momentOfStart.format(\'HHmmss\') <= \'190000\');\n   }',
+    consequence: 'function (R) {\n        \n        \n        this.transactionTotal = this.transactionTotal * 1.10;\n        R.next();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(this && (this.passenger.tripsInLast30Minutes > 10));\n    }',
+    consequence: 'function (R) {\n        \n        \n        this.transactionTotal = this.transactionTotal *1.15;\n        R.next();\n    }',
+    on: true },
+    { condition: 'function (R) {\n        \n        R.when(this && (this.transactionTotal < 50));\n    }',
+    consequence: 'function (R) {\n        \n        this.transactionTotal = 50;\n        R.stop();\n    }',
+    on: true } ]
+    return Rule.create({
+      name: 'default',
+      definition: JSON.stringify(def),
+      belongsTo: username
+    });
+  }
+
   createDefaultAppRole(){
     return Role.create({
       name: 'app',
@@ -111,9 +140,9 @@ module.exports = class DBInitializer {
     });
   }
 
-  createAppWith(aRole){
+  createAppWith(aUsername,aRole){
     BusinessUser.create({
-      username: 'appserver',
+      username: aUsername,
       password: sha256('appserver'),
       name: 'App',
       surname: 'Server'
@@ -158,12 +187,12 @@ module.exports = class DBInitializer {
     });
   }
 
-  initApp(){
+  initApp(username){
     this.appRoleCount().then(appRoleCount => {
       if(appRoleCount == 0){
         this.createDefaultAppRole().then(role => {
           Logger.log('App role created', Logger.INFO());
-          this.createAppWith(role)
+          this.createAppWith(username,role)
           Logger.log('App created with default app role', Logger.INFO()); 
         });
       }else{
@@ -172,12 +201,19 @@ module.exports = class DBInitializer {
     });
   }
 
+  initRulesFor(username){
+    this.createDefaultRuleFor('appserver').then(rule => {
+      Logger.log('Rule \"' + rule.name + '\" for ' + username + ' created', Logger.INFO()); 
+    })
+  }
+
   initialize(){
     sequelizeCheck.dbCheck(() => {
       Logger.log('DB connection is up and running.', Logger.INFO());
       this.initTables().then(() => {
         this.initAdmin();
-        this.initApp();
+        this.initApp('appserver');
+        this.initRulesFor('appserver')
         this.initManagerRole();
       });
     },(err) => {

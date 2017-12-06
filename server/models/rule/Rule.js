@@ -3,12 +3,15 @@ const Sequelize = require('../../db/sequelize');
 const sequelize = new Sequelize();
 
 const Rule = sequelize.define('rule', {
-  definition: {
+  name: {
     type: _Sequelize.STRING,
     allowNull: false
   },
-  app_id: {
-    type: _Sequelize.INTEGER,
+  definition: {
+    type: _Sequelize.TEXT,
+  },
+  belongsTo: {
+    type: _Sequelize.STRING,
     allowNull: false
   }
 });
