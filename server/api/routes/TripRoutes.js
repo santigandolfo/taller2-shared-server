@@ -6,6 +6,8 @@ const SchemaHelper = require('./helpers/schema/SchemaHelper')
 const AuthHelper = require('./helpers/auth/AuthHelper');
 
 const TripController = require('../../controllers/trips/TripsController')
+const BusinessUserCreateSchemaMap = require('./helpers/schema/maps/BusinessUserCreateSchemaMap')
+
 const tripController = new TripController();
 
 router.post('/', (req, res) => {
@@ -40,10 +42,16 @@ router.post('/', (req, res) => {
 
 router.post('/estimate', (req, res) => {
   const trip = req.body;
-  tripController.populateTrip(trip);
-  tripController.estimate(trip).then(result => {
-    res.status(200).json(result);
-  })
+  SchemaHelper.check(user,TripEstimationSchemaMap).then(() => {
+    tripController.populateTrip(trip);
+    tripController.estimate(trip).then(result => {
+      res.status(200).json(result);
+    })
+  }).catch(error => {
+    Logger.log("Trip bad formed: " + JSON.stringify(error),Logger.WARNING());
+    res.status(400).json(error)
+  });
+
 });
 
 

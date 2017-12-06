@@ -81,18 +81,16 @@ module.exports = class TripsController {
     trip.momentOfStart = moment();
 
   }
-
-  estimate(trip){
-
-    var rules = getRules();
-
-    var R = new RuleEngine([], {"ignoreFactChanges": true});
-
-    R.fromJSON(rules);
-    return R.execute(trip,function(result){ 
-      resolve(result.transactionTotal)
-      
-    });
-  }
   
+  estimate(trip) {
+    var rules = getRules();
+    
+        var R = new RuleEngine([], {"ignoreFactChanges": true});
+    
+        R.fromJSON(rules);
+        return R.execute(trip,function(result){ 
+          resolve(result.transactionTotal)
+          
+        });
+  }
 }
