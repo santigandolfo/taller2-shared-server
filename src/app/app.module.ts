@@ -15,7 +15,8 @@ import { BusinessUsersShowComponent } from './components/pages/business-user/sho
 import { BusinessUsersEditComponent } from './components/pages/business-user/edit/business-users.edit.component';
 import { BusinessUsersCreateComponent } from './components/pages/business-user/create/business-users.create.component';
 
-import { RulesListComponent } from './components/pages/rules/rules.list.component';
+import { RulesListComponent } from './components/pages/rules/list/rules.list.component';
+
 
 import { NotFoundComponent } from './components/pages/notfound/notfound.component';
 import { HomeComponent } from './components/pages/home/home.component';
@@ -26,12 +27,21 @@ import { SideBarComponent } from './components/utils/sidebar.component';
 import { UsersService } from './services/users.service';
 import { BusinessUsersService } from './services/business-users.service';
 import { RulesService } from './services/rules.service';
+import { RulesShowComponent } from './components/pages/rules/show/rules.show.component';
 
 // Routes
 const routes: object[] = [
   {
     path: '',
     component: HomeComponent
+  },
+  {
+    path: 'rules',
+    component: RulesListComponent
+  },
+  {
+    path: 'rules/show/:id',
+    component: RulesShowComponent
   },
   {
     path: 'users',
@@ -70,6 +80,7 @@ const routes: object[] = [
     BusinessUsersEditComponent,
     BusinessUsersCreateComponent,
     RulesListComponent,
+    RulesShowComponent,
     SideBarComponent,
     NotFoundComponent,
     HomeComponent
