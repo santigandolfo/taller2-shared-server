@@ -31,10 +31,10 @@ module.exports = class DBInitializer {
                 });
               });
             });
-         // });
+          //});
        // });
       //});
-    //});
+    });
   }
 
   adminRoleCount(){
