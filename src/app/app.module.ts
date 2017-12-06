@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -16,6 +15,8 @@ import { BusinessUsersShowComponent } from './components/pages/business-user/sho
 import { BusinessUsersEditComponent } from './components/pages/business-user/edit/business-users.edit.component';
 import { BusinessUsersCreateComponent } from './components/pages/business-user/create/business-users.create.component';
 
+import { RulesListComponent } from './components/pages/rules/rules.list.component';
+
 import { NotFoundComponent } from './components/pages/notfound/notfound.component';
 import { HomeComponent } from './components/pages/home/home.component';
 
@@ -24,6 +25,7 @@ import { SideBarComponent } from './components/utils/sidebar.component';
 // Services
 import { UsersService } from './services/users.service';
 import { BusinessUsersService } from './services/business-users.service';
+import { RulesService } from './services/rules.service';
 
 // Routes
 const routes: object[] = [
@@ -67,6 +69,7 @@ const routes: object[] = [
     BusinessUsersShowComponent,
     BusinessUsersEditComponent,
     BusinessUsersCreateComponent,
+    RulesListComponent,
     SideBarComponent,
     NotFoundComponent,
     HomeComponent
@@ -80,7 +83,9 @@ const routes: object[] = [
   ],
   providers: [
     UsersService,
-    BusinessUsersService],
+    BusinessUsersService,
+    RulesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
