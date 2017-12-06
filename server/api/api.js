@@ -30,7 +30,7 @@ router.use('/auth', AuthRoutes);
 router.use('/users', UserRoutes);
 router.use('/business-users', BusinessRoutes);
 router.use('/trips', TripRoutes);
-router.use('/rules', RulesRoutes);
+//router.use('/rules', RulesRoutes);
 
 
 module.exports = router;
