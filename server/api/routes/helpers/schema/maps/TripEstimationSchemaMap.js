@@ -6,8 +6,8 @@ const TripEstimationSchemaMap = {
   distance_in_km: Joi.number().required(),
   passenger_id: Joi.number().required(),
   driver_id: Joi.number().required(),
-  start_location: Joi.array().items(Joi.number()).min(2).max(2).required(),
-  end_location: Joi.array().items(Joi.string()).required(),
+  start_location: Joi.array().items(Joi.number()).required(),
+  end_location: Joi.array().items(Joi.number()).required(),
   pay_method: Joi.string().alphanum().required(),
 
 };
