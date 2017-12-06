@@ -1,4 +1,5 @@
 const Trip = require('../../models/trip/Trip');
+const User = require('../../models/user/User');
 const RuleEngine = require('node-rules');
 const _Sequelize = require('sequelize');
 const moment = require('moment');
@@ -61,13 +62,45 @@ module.exports = class TripsController {
     // - Waiting time to be picked up
     var driver = User.findOne({where: { id: trip.driver_id}});
     trip.driver = {};
-    trip.driver.tripsInMonth = 0;
-    trip.driver.tripsInDay = 0;
-    trip.driver.tripsInLastHour = 0;
-    trip.driver.tripsInLast30Mins = 0;
-    trip.driver.tripsInLast10Mins = 0;
-    trip.driver.antiquity = 0;
-    trip.driver.email = '';
+
+    trip.driver.tripsInMonth = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'day')
+        }
+      }
+    });
+    trip.driver.tripsInDay = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'day')
+        }
+      }
+    });
+    trip.driver.tripsInLastHour = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'hour')
+        }
+      }
+    });
+    trip.driver.tripsInLast30Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'minute')
+        }
+      }
+    });
+    trip.driver.tripsInLast10Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(10, 'minute')
+        }
+      }
+    });
+
+    trip.driver.antiquity = 0;//new Date() - driver.createdAt;
+    trip.driver.email = driver.email;
     var passenger = User.findOne({where: { id: trip.passenger_id}});
     trip.passenger = {};
     trip.passenger.tripsInMonth = 0;
