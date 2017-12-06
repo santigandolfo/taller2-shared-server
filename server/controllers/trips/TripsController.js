@@ -259,8 +259,9 @@ module.exports = class TripsController {
         }
     }];
     
+    this.populateTrip(trip)
+    
     var R = new RuleEngine(rulesRider, {"ignoreFactChanges": true});
-
     return new Promise((resolve,reject) => {
       R.execute(trip,function(result){ 
         resolve(result.transactionTotal)
