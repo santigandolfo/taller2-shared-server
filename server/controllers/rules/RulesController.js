@@ -5,6 +5,14 @@ const Op = _Sequelize.Op;
 
 module.exports = class RulesController {
 
+  getRulesByUserName(username){
+    Rule.all({ 
+      where: {
+        belongsTo: username
+      }
+    });
+  }
+
   getDefaultRule(){
     return {
       definition: this.def
