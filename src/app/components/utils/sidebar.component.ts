@@ -23,9 +23,14 @@ import { Router } from '@angular/router';
       </li>
       <li>
         <a routerLink="/users">
-          <i class="material-icons">person_pin_circle</i>Users
+          <i class="material-icons">wc</i>Users
         </a>
       </li>
+      <li>
+      <a routerLink="/rules">
+        <i class="material-icons">check</i>Rules
+      </a>
+    </li>
       <li>
       <a href="" (click)="logout()">
         <i class="material-icons">exit_to_app</i>Logout
