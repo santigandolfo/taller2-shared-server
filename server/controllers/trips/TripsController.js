@@ -52,6 +52,10 @@ module.exports = class TripsController {
     })
   }
 
+  getRules(trip){
+    
+  }
+
   populateTrip(trip){
     // Data which is possible to be asked for when the estimation is happening
     // - Trips in month, day, hour, half an hour, 10 mins and antiquity of driver
@@ -120,12 +124,13 @@ module.exports = class TripsController {
     var rules = getRules();
 
     var R = new RuleEngine([], {"ignoreFactChanges": true});
-
     R.fromJSON(rules);
-    return R.execute(trip,function(result){ 
-      resolve(result.transactionTotal)
-      
-    });
+
+    return new Promise((resolve,reject) => {
+      R.execute(trip,function(result){ 
+        resolve(result.transactionTotal)
+      });
+    })
   }
   
 }
