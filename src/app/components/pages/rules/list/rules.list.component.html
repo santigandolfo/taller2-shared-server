@@ -5,13 +5,15 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Create at</th>
+              <th>Created at</th>
+              <th>Updated at</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let rule of rules">
               <td>{{ rule.name }}</td>
               <td>{{ rule.createdAt }}</td>
+              <td>{{ rule.updatedAt }}</td>
               <td>
                 <i (click)="show(rule)" class="material-icons action" title="Details">format_list_bulleted</i>
                 <i (click)="deletionAttempt(rule)" *ngIf="deletable()" class="material-icons action red-text" title="Delete">delete</i>
@@ -20,4 +22,9 @@
           </tbody>
         </table>
   </div>
+</div>
+<div class="fixed-action-btn" style="bottom: 45px; right: 35px;">
+  <a routerLink="/rules/create" class="btn-floating btn-large red">
+    <i class="large material-icons">add</i>
+  </a>
 </div>

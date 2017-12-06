@@ -29,6 +29,7 @@ import { UsersService } from './services/users.service';
 import { BusinessUsersService } from './services/business-users.service';
 import { RulesService } from './services/rules.service';
 import { RulesShowComponent } from './components/pages/rules/show/rules.show.component';
+import { RulesCreateComponent } from './components/pages/rules/create/rules.create.component';
 
 // Routes
 const routes: object[] = [
@@ -39,6 +40,10 @@ const routes: object[] = [
   {
     path: 'rules',
     component: RulesListComponent
+  },
+  {
+    path: 'rules/create',
+    component: RulesCreateComponent
   },
   {
     path: 'rules/show/:id',
@@ -82,6 +87,7 @@ const routes: object[] = [
     BusinessUsersCreateComponent,
     RulesListComponent,
     RulesShowComponent,
+    RulesCreateComponent,
     SideBarComponent,
     NotFoundComponent,
     HomeComponent

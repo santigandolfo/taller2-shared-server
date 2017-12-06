@@ -1,0 +1,35 @@
+<side-bar [user]="authUser"></side-bar>
+<div class="row">
+  <div class="col offset-l3 l9">
+    <h2>Create a Rule</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col offset-l3 l9">
+      <div class="row">
+          <form #theForm="ngForm" (ngSubmit)="creationAttempt(theForm)" class="col s12 edit-form">
+            
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="rule.name" placeholder="Name" id="name" name="name" type="text" class="validate">
+                <label for="name">Name</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="rule.belongsTo" placeholder="Belongs to" id="belongsTo" name="belongsTo" type="text" class="validate">
+                <label for="belongsTo">Belongs to</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s1">
+                <button class="btn waves-effect waves-light" type="submit" name="create">CREATE</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+  </div>
+</div>

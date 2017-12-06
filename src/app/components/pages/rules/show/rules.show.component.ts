@@ -53,6 +53,11 @@ export class RulesShowComponent {
     if (this.rule != null) {
       this.rulesService.update(this.rule, this.id).then(rule => {
         this.rule = rule;
+        this.notificationBarService.create({
+          message: 'Saved!',
+          type: NotificationType.Success,
+          hideDelay: 3000,
+        });
       }).catch(err => {
         console.log(err);
       });
