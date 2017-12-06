@@ -6,7 +6,7 @@ const Op = _Sequelize.Op;
 module.exports = class RulesController {
 
   getRulesByUserName(username){
-    Rule.all({ 
+    return Rule.all({ 
       where: {
         belongsTo: username
       }

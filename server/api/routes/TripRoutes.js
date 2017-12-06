@@ -55,13 +55,23 @@ router.post('/estimate', (req, res) => {
             currency: "$",
             value: result
           });
+        }).catch(err => {
+          res.status(500).json({
+            error: err.toString()
+          })
+        })
+      }).catch(err => {
+        res.status(500).json({
+          error: err.toString()
         })
       })
-    }).catch(error => {
+    }).catch(err => {
       Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
-      res.status(401).json(error)
+      res.status(401).json({
+        error: err.toString()
+      })
     });    
-  }).catch(error => {
+  }).catch(err => {
     Logger.log("Trip bad formed: " + error.toString(),Logger.WARNING());
     res.status(400).json(error)
   });

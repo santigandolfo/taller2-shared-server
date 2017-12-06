@@ -159,107 +159,13 @@ module.exports = class TripsController {
 
   }
   
-  estimate(trip) {
-    //define the rules
-    var rulesRider = [
-    {
-        "condition": function(R) {
-            
-            R.when(this && (this.balance < 0));
-        },
-        "consequence": function(R) {
-            
-            
-            this.canTravel = false;
-            R.stop();
-        }
-    },
-    {
-        "condition": function(R) {
-            
-            R.when(true);
-        },
-        "consequence": function(R) {
-            
-            
-            this.transactionTotal = this.distance_in_km * 15;
-            R.next();
-        }
-    },{
-        "condition": function(R) {
-            
-            R.when(this && this.momentOfStart
-            && this.momentOfStart.day() == 3
-            && this.momentOfStart.format('HHmmss') >= '160000'
-            && this.momentOfStart.format('HHmmss') <= '170000');
-        },
-        "consequence": function(R) {
-            
-            this.transactionTotal = this.transactionTotal * 0.95;
-            R.next();
-        }
-    },{
-        "condition": function(R) {
-            
-            R.when(this && (this.trips == 0));
-        },
-        "consequence": function(R) {
-            
-            
-            this.transactionTotal -= 100;
-            R.next();
-        }
-    },{
-        "condition": function(R) {
-            
-            R.when(this && this.momentOfStart.day() == 1
-            && this.momentOfStart.format('HHmmss') >= '170000'
-            && this.momentOfStart.format('HHmmss') <= '190000');
-      },
-        "consequence": function(R) {
-            
-            
-            this.transactionTotal = this.transactionTotal * 1.10;
-            R.next();
-        }
-    },{
-        "condition": function(R) {
-            
-            R.when(this && (this.passenger.tripsInLast30Minutes > 10));
-        },
-        "consequence": function(R) {
-            
-            
-            this.transactionTotal = this.transactionTotal *1.15;
-            R.next();
-        }
-    },{
-        "condition": function(R) {
-            
-            R.when(this && (this.transactionTotal < 50));
-        },
-        "consequence": function(R) {
-            
-            this.transactionTotal = 50;
-            R.stop();
-        }
-    }];
-    
-    var R = new RuleEngine(rulesRider, {"ignoreFactChanges": true});
+  estimate(trip,rules) {    
+    var R = new RuleEngine(rules, {"ignoreFactChanges": true});
     return new Promise((resolve,reject) => {
       R.execute(trip,function(result){ 
         console.log("result -> " + JSON.stringify(result))
         resolve(result.transactionTotal)
       });
     })
-    // var rules = getRules();
-    
-    //     var R = new RuleEngine([], {"ignoreFactChanges": true});
-    
-    //     R.fromJSON(rules);
-    //     return R.execute(trip,function(result){ 
-    //       resolve(result.transactionTotal)
-          
-    //     });
   }
 }
