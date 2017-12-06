@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NotificationBarModule } from 'angular2-notification-bar';
+import { AceEditorModule } from 'ng2-ace-editor';
 // Components
 import { AppComponent } from './app.component';
 
@@ -90,6 +91,7 @@ const routes: object[] = [
     FormsModule,
     HttpModule,
     NotificationBarModule,
+    AceEditorModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

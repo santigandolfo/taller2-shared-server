@@ -15,11 +15,16 @@
                 <p class="medium-small grey-text">Rule name</p>                        
             </div>
             <div class="col s4 center-align">
-                <h4 class="card-title grey-text text-darken-4">@{{ user.belongsTo }}</h4>
+                <h4 class="card-title grey-text text-darken-4">{{ rule.belongsTo }}</h4>
                 <p class="medium-small grey-text">Belongs to</p>                        
             </div>                                     
           </div>
         </div>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col offset-l3 l9">
+      <ace-editor [(text)]="rule.definition" [mode]="'javascript'" style="min-height: 200px; width:100%; overflow: auto;"></ace-editor>
   </div>
 </div>

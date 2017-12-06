@@ -5,6 +5,7 @@ import { BusinessUser } from '../../../../entities/business-user.entity';
 import { Rule } from '../../../../entities/rule.entity';
 import { Router, ActivatedRoute} from '@angular/router';
 import { NotificationBarService, NotificationType } from 'angular2-notification-bar';
+import { AceEditorComponent } from 'ng2-ace-editor/src/component';
 @Component({
   selector: 'rules-show',
   templateUrl: './rules.show.component.html',
@@ -12,7 +13,15 @@ import { NotificationBarService, NotificationType } from 'angular2-notification-
 })
 export class RulesShowComponent implements OnInit {
 
-  rule: Rule | null;
+  rule: Rule = {
+   id: null,
+   name: null,
+   definition: '',
+   belongsTo: '',
+   createdAt: '',
+   updatedAt: ''
+  };
+
   authUser: BusinessUser | null;
   constructor(
     private router: Router,
@@ -31,7 +40,7 @@ export class RulesShowComponent implements OnInit {
   ngOnInit() {
     this.route.params
     .subscribe(params => {
-      this.rulesService.getById(1).then(rule => {
+      this.rulesService.getById(params['id']).then(rule => {
         console.log(rule);
         this.rule = rule;
       });
