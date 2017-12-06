@@ -4,17 +4,24 @@
       <table class="bordered centered">
           <thead>
             <tr>
-                <th>Name</th>
-                <th>Create at</th>
+                <th>Username</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Type</th>
+                <th>Email</th>  
+                <th>Actions</th> 
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let rule of rules">
-              <td>{{ rule.name }}</td>
-              <td>{{ rule.createdAt }}</td>
+            <tr *ngFor="let user of users">
+              <td>@{{ user.username }}</td>
+              <td>{{ user.firstname }}</td>
+              <td>{{ user.lastname }}</td>
+              <td>{{ user.type }}</td>
+              <td>{{ user.email }}</td>
               <td>
-                <i (click)="show(rule)" class="material-icons action" title="Details">format_list_bulleted</i>
-                <i (click)="deletionAttempt(rule)" *ngIf="deletable()" class="material-icons action red-text" title="Delete">delete</i>
+                <i (click)="show(user)" class="material-icons action" title="Details">format_list_bulleted</i>
+                <i (click)="deletionAttempt(user)" *ngIf="deletable(user)" class="material-icons action red-text" title="Delete">delete</i>
               </td>
             </tr>
           </tbody>
