@@ -21,9 +21,9 @@ module.exports = class DBInitializer {
   initTables(){
     return new Promise(resolve => {
       let dropTable = this.environment == 'DEVELOPMENT';
-      Rule.sync({ force: dropTable }).then(() => {
-        Trip.sync({ force: dropTable }).then(() => {
-          Car.sync({ force: dropTable }).then(() => {
+      //Rule.sync({ force: dropTable }).then(() => {
+        //Trip.sync({ force: dropTable }).then(() => {
+         // Car.sync({ force: dropTable }).then(() => {
             User.sync({ force: dropTable }).then(() => {
               Role.sync({ force: dropTable }).then(() => {
                 BusinessUser.sync({ force: dropTable }).then(() =>{
@@ -32,9 +32,9 @@ module.exports = class DBInitializer {
               });
             });
           });
-        });
-      });
-    });
+       // });
+      //});
+    //});
   }
 
   adminRoleCount(){
