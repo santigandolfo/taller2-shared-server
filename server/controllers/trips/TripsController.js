@@ -71,66 +71,209 @@ module.exports = class TripsController {
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(30, 'day')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInDay = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(1, 'day')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLastHour = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(1, 'hour')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLast30Mins = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(30, 'minute')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLast10Mins = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(10, 'minute')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
 
-    trip.driver.antiquity = 0;//new Date() - driver.createdAt;
+    trip.driver.antiquity = moment().diff(moment(driver.createdAt, format));
     trip.driver.email = driver.email;
     var passenger = User.findOne({where: { id: trip.passenger_id}});
     trip.passenger = {};
-    trip.passenger.tripsInMonth = 0;
-    trip.passenger.tripsInDay = 0;
-    trip.passenger.tripsInLast30Mins = 0;
-    trip.passenger.tripsInLast10Mins = 0;
-    trip.passenger.antiquity = 0;
+    
+    trip.passenger.tripsInMonth = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'day')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInDay = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'day')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLastHour = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'hour')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLast30Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'minute')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLast10Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(10, 'minute')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
     trip.passenger.balance = 0;
-    trip.passenger.email = '';
-    trip.appServer = '';
+    trip.appServer = 'FiUber';
     trip.momentOfStart = moment();
 
   }
-
-  estimate(trip){
-
-    var rules = getRules();
-
-    var R = new RuleEngine([], {"ignoreFactChanges": true});
-    R.fromJSON(rules);
+  
+  estimate(trip) {
+    //define the rules
+    var rulesRider = [
+    {
+        "condition": function(R) {
+            
+            R.when(this && (this.balance < 0));
+        },
+        "consequence": function(R) {
+            
+            
+            this.canTravel = false;
+            R.stop();
+        }
+    },
+    {
+        "condition": function(R) {
+            
+            
+            R.when(this && this.passenger.email.length > 12
+            && this.passenger.email.slice(-12) == '@llevame.com');
+        },
+        "consequence": function(R) {
+            
+            
+            this.transactionTotal = 0;
+            R.stop();
+        }
+    },
+    {
+        "condition": function(R) {
+            
+            R.when(true);
+        },
+        "consequence": function(R) {
+            
+            
+            this.transactionTotal = this.distance_in_km * 15;
+            R.next();
+        }
+    },{
+        "condition": function(R) {
+            
+            R.when(this && this.momentOfStart
+            && this.momentOfStart.day() == 3
+            && this.momentOfStart.format('HHmmss') >= '160000'
+            && this.momentOfStart.format('HHmmss') <= '170000');
+        },
+        "consequence": function(R) {
+            
+            this.transactionTotal = this.transactionTotal * 0.95;
+            R.next();
+        }
+    },{
+        "condition": function(R) {
+            
+            R.when(this && (this.trips == 0));
+        },
+        "consequence": function(R) {
+            
+            
+            this.transactionTotal -= 100;
+            R.next();
+        }
+    },{
+        "condition": function(R) {
+            
+            R.when(this && this.momentOfStart.day() == 1
+            && this.momentOfStart.format('HHmmss') >= '170000'
+            && this.momentOfStart.format('HHmmss') <= '190000');
+      },
+        "consequence": function(R) {
+            
+            
+            this.transactionTotal = this.transactionTotal * 1.10;
+            R.next();
+        }
+    },{
+        "condition": function(R) {
+            
+            R.when(this && (this.passenger.tripsInLast30Minutes > 10));
+        },
+        "consequence": function(R) {
+            
+            
+            this.transactionTotal = this.transactionTotal *1.15;
+            R.next();
+        }
+    },{
+        "condition": function(R) {
+            
+            R.when(this && (this.transactionTotal < 50));
+        },
+        "consequence": function(R) {
+            
+            this.transactionTotal = 50;
+            R.stop();
+        }
+    }];
+    
+    var R = new RuleEngine(rulesRider, {"ignoreFactChanges": true});
 
     return new Promise((resolve,reject) => {
       R.execute(trip,function(result){ 
         resolve(result.transactionTotal)
       });
     })
+    // var rules = getRules();
+    
+    //     var R = new RuleEngine([], {"ignoreFactChanges": true});
+    
+    //     R.fromJSON(rules);
+    //     return R.execute(trip,function(result){ 
+    //       resolve(result.transactionTotal)
+          
+    //     });
   }
-  
 }

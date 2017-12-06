@@ -1,7 +1,5 @@
 const Joi = require('joi');
-const PositionSchema = {
 
-}
 const TripEstimationSchemaMap = {
   time_travel_in_min: Joi.number().required(),
   time_pickup_in_min: Joi.number().required(),
