@@ -67,50 +67,90 @@ module.exports = class TripsController {
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(30, 'day')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInDay = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(1, 'day')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLastHour = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(1, 'hour')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLast30Mins = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(30, 'minute')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
     trip.driver.tripsInLast10Mins = Trip.count({ 
       where: {
         createdAt: {
           [Op.gte]: moment().subtract(10, 'minute')
-        }
+        },
+        driver_id: trip.driver_id
       }
     });
 
-    trip.driver.antiquity = 0;//new Date() - driver.createdAt;
+    trip.driver.antiquity = moment().diff(moment(driver.createdAt, format));//new Date() - driver.createdAt;
     trip.driver.email = driver.email;
     var passenger = User.findOne({where: { id: trip.passenger_id}});
     trip.passenger = {};
-    trip.passenger.tripsInMonth = 0;
-    trip.passenger.tripsInDay = 0;
-    trip.passenger.tripsInLast30Mins = 0;
-    trip.passenger.tripsInLast10Mins = 0;
-    trip.passenger.antiquity = 0;
-    trip.passenger.balance = 0;
-    trip.passenger.email = '';
-    trip.appServer = '';
+    
+    trip.passenger.tripsInMonth = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'day')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInDay = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'day')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLastHour = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(1, 'hour')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLast30Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(30, 'minute')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    trip.passenger.tripsInLast10Mins = Trip.count({ 
+      where: {
+        createdAt: {
+          [Op.gte]: moment().subtract(10, 'minute')
+        },
+        passenger_id: trip.passenger_id
+      }
+    });
+    
+    trip.appServer = 'FiUber';
     trip.momentOfStart = moment();
 
   }
