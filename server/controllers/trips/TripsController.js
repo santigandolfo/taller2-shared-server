@@ -108,7 +108,7 @@ module.exports = class TripsController {
       }
     });
 
-    trip.driver.antiquity = moment().diff(moment(driver.createdAt, format));
+    trip.driver.antiquity = moment().diff(moment(driver.createdAt, 'HHmmss'));
     trip.driver.email = driver.email;
     var passenger = User.findOne({where: { id: trip.passenger_id}});
     trip.passenger = {};
@@ -171,20 +171,6 @@ module.exports = class TripsController {
             
             
             this.canTravel = false;
-            R.stop();
-        }
-    },
-    {
-        "condition": function(R) {
-            
-            
-            R.when(this && this.passenger.email.length > 12
-            && this.passenger.email.slice(-12) == '@llevame.com');
-        },
-        "consequence": function(R) {
-            
-            
-            this.transactionTotal = 0;
             R.stop();
         }
     },
@@ -259,11 +245,10 @@ module.exports = class TripsController {
         }
     }];
     
-    this.populateTrip(trip)
-    
     var R = new RuleEngine(rulesRider, {"ignoreFactChanges": true});
     return new Promise((resolve,reject) => {
       R.execute(trip,function(result){ 
+        console.log("result -> " + JSON.stringify(result))
         resolve(result.transactionTotal)
       });
     })
