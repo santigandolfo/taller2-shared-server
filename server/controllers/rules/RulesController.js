@@ -1,4 +1,4 @@
-const Rule = require('../../models/Rule/Rule');
+const Rule = require('../../models/rule/Rule');
 const RuleEngine = require('node-rules');
 const _Sequelize = require('sequelize')
 const Op = _Sequelize.Op;
