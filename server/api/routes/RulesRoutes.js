@@ -23,7 +23,7 @@ router.get('/to/me', (req, res) => {
   });  
 })
 
-router.post('/to/:userId', (req, res) => {
+router.post('/', (req, res) => {
   const userId = req.params.userId 
   let rule = req.body;
   AuthHelper.verifyToken(req, res).then(authUser => {
@@ -39,10 +39,12 @@ router.post('/to/:userId', (req, res) => {
   });      
 })
 
-router.get('/to/:userId', (req, res) => {
-  const userId = req.params.userId 
+router.get('/', (req, res) => {
   AuthHelper.verifyToken(req, res).then(authUser => {
     AuthHelper.isAllowedTo(authUser,'view_rules').then(() => {
+      // controller.getAll().then(rules => {
+
+      // })
       res.status(200).send();
     }).catch(error => {
       Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
@@ -52,6 +54,16 @@ router.get('/to/:userId', (req, res) => {
     Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
     res.status(401).json(error)
   });  
+})
+
+router.get('/:ruleId', (req, res) => {
+  const userId = req.params.userId 
+  AuthHelper.verifyToken(req, res).then(authUser => {
+      res.status(200).send();
+  }).catch(error => {
+    Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
+    res.status(401).json(error)
+  }); 
 })
 
 router.put('/:ruleId', (req, res) => {
