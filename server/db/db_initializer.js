@@ -24,13 +24,13 @@ module.exports = class DBInitializer {
       //Rule.sync({ force: dropTable }).then(() => {
         //Trip.sync({ force: dropTable }).then(() => {
          // Car.sync({ force: dropTable }).then(() => {
-            User.sync({ force: dropTable }).then(() => {
-              Role.sync({ force: dropTable }).then(() => {
-                BusinessUser.sync({ force: dropTable }).then(() =>{
-                  resolve();
+              User.sync({ force: dropTable }).then(() => {
+                Role.sync({ force: dropTable }).then(() => {
+                  BusinessUser.sync({ force: dropTable }).then(() =>{
+                    resolve();
+                  });
                 });
               });
-            });
           //});
        // });
       //});
