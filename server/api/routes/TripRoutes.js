@@ -6,10 +6,12 @@ const SchemaHelper = require('./helpers/schema/SchemaHelper')
 const AuthHelper = require('./helpers/auth/AuthHelper');
 
 const TripController = require('../../controllers/trips/TripsController')
+const RulesController = require('../../controllers/rules/RulesController')
 const BusinessUserCreateSchemaMap = require('./helpers/schema/maps/BusinessUserCreateSchemaMap')
 const TripEstimationSchemaMap = require('./helpers/schema/maps/TripEstimationSchemaMap')
 
 const tripController = new TripController();
+const rulesController = new RulesController();
 
 router.post('/', (req, res) => {
   const trip = req.body;
@@ -44,14 +46,21 @@ router.post('/', (req, res) => {
 router.post('/estimate', (req, res) => {
   const trip = req.body;
   SchemaHelper.check(trip,TripEstimationSchemaMap).then(() => {
-    tripController.populateTrip(trip);
-    tripController.estimate(trip).then(result => {
-      console.log(result)
-      res.status(200).json({
-        currency: "$",
-        value: result
-      });
-    })
+    AuthHelper.verifyToken(req, res).then(authUser => {
+      tripController.populateTrip(trip);
+      rulesController.getRulesByUserName(authUser.username).then(rules => {
+        tripController.estimate(trip,rules).then(result => {
+          console.log(result)
+          res.status(200).json({
+            currency: "$",
+            value: result
+          });
+        })
+      })
+    }).catch(error => {
+      Logger.log("User unauthorized: " + JSON.stringify(error),Logger.WARNING());
+      res.status(401).json(error)
+    });    
   }).catch(error => {
     Logger.log("Trip bad formed: " + error.toString(),Logger.WARNING());
     res.status(400).json(error)
