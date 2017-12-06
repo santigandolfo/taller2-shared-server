@@ -25,6 +25,8 @@
 </div>
 <div class="row">
   <div class="col offset-l3 l9">
-      <ace-editor [(text)]="rule.definition" [mode]="'javascript'" style="min-height: 200px; width:100%; overflow: auto;"></ace-editor>
+      <div class="editor">
+          <ace-editor [(text)]="rule.definition" [mode]="'javascript'" style="min-height: 240px; width:100%; overflow: auto;"></ace-editor>
+      </div>
   </div>
 </div>
