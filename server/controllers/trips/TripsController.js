@@ -160,8 +160,9 @@ module.exports = class TripsController {
   }
   
   estimate(trip,rules) { 
-    console.log(JSON.stringify(rules))   
-    var R = new RuleEngine(rules, {"ignoreFactChanges": true});
+    const definition = JSON.parse(rules[0].definition)
+    var R = new RuleEngine([],{"ignoreFactChanges": true});
+    R.fromJSON(definition);
     return new Promise((resolve,reject) => {
       R.execute(trip,function(result){ 
         console.log("result -> " + JSON.stringify(result))
