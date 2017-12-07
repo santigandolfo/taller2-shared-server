@@ -20,7 +20,7 @@ module.exports = class DBInitializer {
 
   initTables(){
     return new Promise(resolve => {
-      let dropTable = false;
+      let dropTable = true;
       Rule.sync({ force: dropTable }).then(() => {
         Trip.sync({ force: dropTable }).then(() => {
           Car.sync({ force: dropTable }).then(() => {
@@ -70,6 +70,7 @@ module.exports = class DBInitializer {
       edit_bs_users: true,
       delete_bs_users: true,
       edit_users: true,
+      view_rules: true,
       view_my_rules: false,
     });
   }
