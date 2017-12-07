@@ -47,7 +47,7 @@ router.post('/estimate', (req, res) => {
   const trip = req.body;
   SchemaHelper.check(trip,TripEstimationSchemaMap).then(() => {
     AuthHelper.verifyToken(req, res).then(authUser => {
-      tripController.populateTrip(trip);
+      tripController.populateTrip(trip, authUser.username);
       rulesController.getRulesByUserName(authUser.username).then(rules => {
         tripController.estimate(trip,rules).then(result => {
           console.log(result)

@@ -56,7 +56,7 @@ module.exports = class TripsController {
     
   }
 
-  populateTrip(trip){
+  populateTrip(trip, appServerName){
     // Data which is possible to be asked for when the estimation is happening
     // - Trips in month, day, hour, half an hour, 10 mins and antiquity of driver
     // - Trips in month, day, hour, half an hour, 10 mins, balance and antiquity of passenger
@@ -154,7 +154,7 @@ module.exports = class TripsController {
       }
     });
     trip.passenger.balance = 0;
-    trip.appServer = 'FiUber';
+    trip.appServer = appServerName;
     trip.momentOfStart = moment();
 
   }
