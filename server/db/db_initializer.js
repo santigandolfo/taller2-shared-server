@@ -70,6 +70,7 @@ module.exports = class DBInitializer {
       edit_bs_users: true,
       delete_bs_users: true,
       edit_users: true,
+      view_rules: true,
       view_my_rules: false,
     });
   }

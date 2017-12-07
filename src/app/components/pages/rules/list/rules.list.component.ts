@@ -39,7 +39,7 @@ export class RulesListComponent implements OnInit {
   }
 
   deletable() {
-    return true;
+    return (this.authUser.role != null && this.authUser.role.delete_rules);
   }
 
   deletionAttempt(rule) {
@@ -49,9 +49,23 @@ export class RulesListComponent implements OnInit {
   }
 
   delete(anId) {
-    this.rules = this.rules.filter(user => {
-      return user.id !== anId;
+    this.rulesService.delete(anId).then(res => {
+      this.notificationBarService.create({
+        message: 'Deletion succeed',
+        type: NotificationType.Success,
+        hideDelay: 3000,
+      });
+      this.rules = this.rules.filter(user => {
+        return user.id !== anId;
+      });
+    }).catch(err => {
+      this.notificationBarService.create({
+        message: 'Deletion failed: ' + err,
+        type: NotificationType.Error,
+        hideDelay: 3000,
+      });
     });
+
   }
 
 }

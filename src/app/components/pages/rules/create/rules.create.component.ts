@@ -16,7 +16,7 @@ export class RulesCreateComponent  implements OnInit {
   authUser: BusinessUser | null;
   rule: Rule | null = {
     name: '',
-    definition: '{ \"default\": 1300 }',
+    definition: '',
     belongsTo: ''
   };
 
@@ -51,6 +51,12 @@ export class RulesCreateComponent  implements OnInit {
         hideDelay: 3000,
       });
       this.router.navigate(['/rules']);
+    }).catch(err => {
+      this.notificationBarService.create({
+        message: 'Create failed',
+        type: NotificationType.Error,
+        hideDelay: 3000,
+      });
     });
   }
 

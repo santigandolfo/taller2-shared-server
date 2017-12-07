@@ -14,6 +14,10 @@ export interface Role {
    create_users: boolean;
    edit_users: boolean;
    delete_users: boolean;
-   view_settings: boolean;
-   edit_settings: boolean;
+   view_rules: boolean;
+   view_my_rules: boolean;
+   run_rules: boolean;
+   create_rules: boolean;
+   edit_rules: boolean;
+   delete_rules: boolean;
 }

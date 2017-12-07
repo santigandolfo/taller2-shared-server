@@ -5,7 +5,7 @@ const Op = _Sequelize.Op;
 
 module.exports = class RulesController {
 
-  getRulesByUserName(username){
+  getByUserName(username){
     return Rule.all({ 
       where: {
         belongsTo: username
@@ -13,10 +13,30 @@ module.exports = class RulesController {
     });
   }
 
-  getDefaultRule(){
-    return {
-      definition: this.def
-    }
+  getById(anId){
+    return Rule.findOne({ 
+      where: {
+        id: anId
+      }
+    });
+  }
+
+  getAll(){
+    return Rule.all()
+  }
+
+  create(rule){
+    return Rule.create(rule);
+  }
+
+  delete(anId){
+    return Rule.destroy({where:{ id: anId }});
+  }
+
+  update(rule,anId){
+    return Rule.update(rule,{
+      where:{ id: anId },
+    });
   }
 
 }
