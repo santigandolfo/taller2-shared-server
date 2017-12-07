@@ -38,6 +38,10 @@ export class RulesShowComponent {
     this.init();
   }
 
+  editable() {
+    return (this.authUser.role != null && this.authUser.role.edit_rules);
+  }
+
   init() {
     this.route.params
     .subscribe(params => {
@@ -52,14 +56,17 @@ export class RulesShowComponent {
   save() {
     if (this.rule != null) {
       this.rulesService.update(this.rule, this.id).then(rule => {
-        this.rule = rule;
         this.notificationBarService.create({
-          message: 'Saved!',
+          message: 'Rule saved!',
           type: NotificationType.Success,
           hideDelay: 3000,
         });
       }).catch(err => {
-        console.log(err);
+        this.notificationBarService.create({
+          message: 'Rule could not be saved',
+          type: NotificationType.Error,
+          hideDelay: 3000,
+        });
       });
     }
   }

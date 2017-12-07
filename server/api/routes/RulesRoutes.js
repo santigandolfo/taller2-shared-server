@@ -10,7 +10,7 @@ router.post('/', (req, res) => {
   let rule = req.body;
   AuthHelper.verifyToken(req, res).then(authUser => {
     AuthHelper.isAllowedTo(authUser,'create_rules').then(() => {
-      controller.create().then(rule => {
+      controller.create(rule).then(rule => {
         res.status(200).json({
           id: rule.id
         });
@@ -64,7 +64,7 @@ router.put('/:ruleId', (req, res) => {
   const ruleId = req.params.ruleId 
   let rule = req.body;
   AuthHelper.verifyToken(req, res).then(authUser => {
-    AuthHelper.isAllowedTo(authUser,'edit_(rules').then(() => {
+    AuthHelper.isAllowedTo(authUser,'edit_rules').then(() => {
       controller.update(rule,ruleId).then(() => {
         res.status(200).send();
       })

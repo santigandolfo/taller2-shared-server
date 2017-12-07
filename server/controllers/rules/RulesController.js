@@ -26,7 +26,7 @@ module.exports = class RulesController {
   }
 
   create(rule){
-    return Rule.crete(rule);
+    return Rule.create(rule);
   }
 
   delete(anId){
@@ -34,7 +34,7 @@ module.exports = class RulesController {
   }
 
   update(rule,anId){
-    return BusinessUser.update(user,{
+    return Rule.update(rule,{
       where:{ id: anId },
     });
   }
